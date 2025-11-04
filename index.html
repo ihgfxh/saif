@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -108,6 +107,8 @@
     @media(max-width:768px){
       #pcVersion{display:none;}
       #mobileVersion{display:block;}
+      #mobileVersion h2{margin-bottom:20px;}
+      #mobileVersion .card{width:90%;margin:15px auto;}
     }
   </style>
 </head>
@@ -157,14 +158,43 @@
   <footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
 </div>
 
+<!-- نسخة الهاتف المحسنة -->
 <div id="mobileVersion">
   <div style="padding:60px 15px;text-align:center;">
-    <h2>📚 العد التنازلي للامتحانات</h2>
-    <div id="mContent">
-      <p>📝 امتحانات منتصف الفصل: جارٍ الحساب...</p>
-      <p>🎓 الامتحانات النهائية: جارٍ الحساب...</p>
-      <p>📅 افتح الموقع من الكمبيوتر لتجربة النسخة الكاملة 💻</p>
+    <h1>📚 العد التنازلي للامتحانات</h1>
+    <div class="grid">
+      <div class="card">
+        <h2>📝 امتحانات منتصف الفصل</h2>
+        <div id="midtermMobile" class="time">جارٍ الحساب...</div>
+        <div class="progress-container"><div class="progress-bar" id="midtermProgressMobile"></div></div>
+      </div>
+
+      <div class="card">
+        <h2>🎓 الامتحانات النهائية</h2>
+        <div id="finalsMobile" class="time">جارٍ الحساب...</div>
+        <div class="progress-container"><div class="progress-bar" id="finalsProgressMobile"></div></div>
+      </div>
+
+      <div class="card">
+        <h2>🎯 هدف اليوم</h2>
+        <input type="text" id="dailyGoalMobile" placeholder="اكتب هدفك لليوم...">
+        <p id="goalStatusMobile" style="margin-top:10px;color:#ffe66d;font-weight:600;"></p>
+      </div>
+
+      <div class="card">
+        <h2>📊 نسبة إنجاز المذاكرة</h2>
+        <input type="range" id="progressInputMobile" min="0" max="100" step="1">
+        <p id="progressTextMobile">إنجازك: 0%</p>
+      </div>
+
+      <div class="card">
+        <h2>🏆 نقاط التحفيز</h2>
+        <p id="pointsDisplayMobile">جارٍ الحساب...</p>
+      </div>
     </div>
+
+    <div class="tip" id="dailyTipMobile">جارٍ تحميل النصيحة...</div>
+    <footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
   </div>
 </div>
 
@@ -173,20 +203,21 @@ const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 document.getElementById("pcVersion").style.display = isMobile ? "none" : "block";
 document.getElementById("mobileVersion").style.display = isMobile ? "block" : "none";
 
-/* نسخة الكمبيوتر */
-if(!isMobile){
-  function toRiyadhTime(date){const utc=date.getTime()+date.getTimezoneOffset()*60000;return new Date(utc+3*60*60000);}
-  const semesterStart=new Date(Date.UTC(2025,8,7)),midtermDate=new Date(Date.UTC(2025,11,4,9)),finalsDate=new Date(Date.UTC(2026,0,4,9));
-  const getNow=()=>toRiyadhTime(new Date());
+/* دوال تحويل الوقت */
+function toRiyadhTime(date){const utc=date.getTime()+date.getTimezoneOffset()*60000;return new Date(utc+3*60*60000);}
+const semesterStart=new Date(Date.UTC(2025,8,7)),midtermDate=new Date(Date.UTC(2025,11,4,9)),finalsDate=new Date(Date.UTC(2026,0,4,9));
+const getNow=()=>toRiyadhTime(new Date());
 
+/* دوال الكمبيوتر */
+if(!isMobile){
   const updateDate=()=>{const n=getNow();document.getElementById("currentDate").textContent=n.toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
   const updateWeek=()=>{const n=getNow(),diff=n-semesterStart,w=Math.ceil(diff/(1000*60*60*24*7))+2,el=document.getElementById("weekNumber");
     if(w<1)el.textContent="⏳ الفصل لم يبدأ بعد";else if(w>16)el.textContent="🎉 انتهى الفصل الدراسي";else el.textContent=`📅 الأسبوع ${w}`;}
   const updateTimer=(id,dist,msg,start,end,progId)=>{
     const el=document.getElementById(id),prog=document.getElementById(progId);
     if(dist<0){el.textContent=msg;prog.style.width="100%";return;}
-    const d=Math.floor(dist/(1000*60*60*24)),h=Math.floor((dist%(1000*60*60*24))/(1000*60*60)),m=Math.floor((dist%(1000*60*60))/(1000*60)),s=Math.floor((dist%(1000*60))/1000);
-    el.innerHTML=`${d}ي ${h}س ${m}د ${s}ث`;
+    const d=Math.floor(dist/(1000*60*60*24));
+    el.innerHTML=`${d} أيام`;
     const total=end-start,elapsed=new Date().getTime()-start,progress=Math.min(Math.max((elapsed/total)*100,0),100);
     prog.style.width=progress+"%";
   };
@@ -197,11 +228,7 @@ if(!isMobile){
   };
 
   const tips=["📖 راجع ملخصات الدروس","⏱️ خصص وقتًا للراحة","📝 حل أسئلة سابقة","☕ لا تسهر كثيرًا","💪 ثق بنفسك!","😴 نم كفاية","📚 نظم وقتك","🤝 ذاكر مع أصدقائك"];
-  let t=0;setInterval(()=>{
-    const el=document.getElementById("dailyTip");
-    el.style.opacity=0;
-    setTimeout(()=>{t=(t+1)%tips.length;el.textContent=tips[t];el.style.opacity=1;},500);
-  },6000);
+  let t=0;setInterval(()=>{const el=document.getElementById("dailyTip");el.style.opacity=0;setTimeout(()=>{t=(t+1)%tips.length;el.textContent=tips[t];el.style.opacity=1;},500);},6000);
 
   const theme=document.getElementById("themeToggle");
   const setTheme=(m)=>{document.body.classList.toggle("light",m==="light");theme.textContent=m==="light"?"☀️":"🌙";localStorage.setItem("theme",m);}
@@ -224,12 +251,39 @@ if(!isMobile){
   setInterval(updateAll,1000);updateAll();
 }
 
-/* نسخة الهاتف الأصلية */
+/* دوال الهاتف */
 if(isMobile){
-  document.getElementById("mContent").innerHTML = `
-    <p>📝 امتحانات منتصف الفصل: جارٍ الحساب...</p>
-    <p>🎓 الامتحانات النهائية: جارٍ الحساب...</p>
-    <p>📅 افتح الموقع من الكمبيوتر لتجربة النسخة الكاملة 💻</p>`;
+  const updateTimerMobile=(id,dist,msg,start,end,progId)=>{
+    const el=document.getElementById(id),prog=document.getElementById(progId);
+    if(dist<0){el.textContent=msg;prog.style.width="100%";return;}
+    const d=Math.floor(dist/(1000*60*60*24));
+    el.innerHTML=`${d} أيام`;
+    const total=end-start,elapsed=new Date().getTime()-start,progress=Math.min(Math.max((elapsed/total)*100,0),100);
+    prog.style.width=progress+"%";
+  };
+  const updateCountdownMobile=()=>{
+    const now=getNow().getTime();
+    updateTimerMobile("midtermMobile",midtermDate-now,"🎯 بدأت امتحانات منتصف الفصل!",semesterStart.getTime(),midtermDate.getTime(),"midtermProgressMobile");
+    updateTimerMobile("finalsMobile",finalsDate-now,"🏁 بدأت الامتحانات النهائية!",midtermDate.getTime(),finalsDate.getTime(),"finalsProgressMobile");
+  };
+
+  const tips=["📖 راجع ملخصات الدروس","⏱️ خصص وقتًا للراحة","📝 حل أسئلة سابقة","☕ لا تسهر كثيرًا","💪 ثق بنفسك!","😴 نم كفاية","📚 نظم وقتك","🤝 ذاكر مع أصدقائك"];
+  let t=0;setInterval(()=>{const el=document.getElementById("dailyTipMobile");el.style.opacity=0;setTimeout(()=>{t=(t+1)%tips.length;el.textContent=tips[t];el.style.opacity=1;},500);},6000);
+
+  const goal=document.getElementById("dailyGoalMobile"),gs=document.getElementById("goalStatusMobile");
+  goal.value=localStorage.getItem("goalMobile")||"";gs.textContent=goal.value?`🎯 هدفك: ${goal.value}`:"✍️ اكتب هدفك لليوم!";
+  goal.onchange=()=>{localStorage.setItem("goalMobile",goal.value);gs.textContent=`🎯 هدفك: ${goal.value}`;};
+
+  const pr=document.getElementById("progressInputMobile"),pt=document.getElementById("progressTextMobile");
+  pr.value=localStorage.getItem("studyProgressMobile")||0;pt.textContent=`إنجازك: ${pr.value}%`;
+  pr.oninput=()=>{pt.textContent=`إنجازك: ${pr.value}%`;localStorage.setItem("studyProgressMobile",pr.value);};
+
+  const pd=document.getElementById("pointsDisplayMobile");let pts=parseInt(localStorage.getItem("motivationPointsMobile")||"0");const today=new Date().toDateString();
+  if(localStorage.getItem("lastVisitMobile")!==today){pts++;localStorage.setItem("motivationPointsMobile",pts);localStorage.setItem("lastVisitMobile",today);}
+  pd.textContent=`⭐ عدد زياراتك: ${pts}`;
+
+  setInterval(updateCountdownMobile,1000);
+  updateCountdownMobile();
 }
 </script>
 </body>
