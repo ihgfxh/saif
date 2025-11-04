@@ -142,8 +142,8 @@
 
   <div class="countdown" style="width:300px; margin-top:20px;">
     <h2>🎯 هدف اليوم</h2>
-    <textarea id="dailyGoal" placeholder="اكتب هدفك لليوم..." rows="5" style="width:100%; padding:18px; font-size:1.25em; border-radius:12px; border:none; resize:none;"></textarea>
-    <p id="goalStatus" style="margin-top:10px; color:#ffe66d; font-weight:600;"></p>
+    <textarea id="dailyGoal" placeholder="اكتب هدفك لليوم..." rows="1" style="width:100%; padding:10px; font-size:1em; border-radius:8px; border:none; resize:none;"></textarea>
+    <p id="goalStatus" style="margin-top:10px; color:#ffe66d; font-weight:600;">✍️ اكتب هدفك لليوم!</p>
   </div>
 
   <div class="countdown" style="width:300px; margin-top:20px;">
@@ -238,57 +238,45 @@
     function changeTip() {
       tipElement.style.opacity = 0;
       setTimeout(() => {
-        tipIndex = (tipIndex + 1) % tips.length;
         tipElement.textContent = tips[tipIndex];
         tipElement.style.opacity = 1;
+        tipIndex = (tipIndex+1)%tips.length;
       }, 600);
     }
 
-    const themeButton = document.getElementById("themeToggle");
-    function toggleTheme(){
-      document.body.classList.toggle("light");
-      themeButton.textContent = document.body.classList.contains("light") ? "🌙" : "☀️";
-    }
-    themeButton.addEventListener("click", toggleTheme);
+    setInterval(changeTip, 7000);
+    changeTip();
 
-    const dailyGoalInput = document.getElementById("dailyGoal");
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      document.body.classList.toggle("light");
+    });
+
+    const dailyGoal = document.getElementById("dailyGoal");
     const goalStatus = document.getElementById("goalStatus");
-    dailyGoalInput.addEventListener("keypress", (e)=>{
-      if(e.key === "Enter") {
-        e.preventDefault();
-        const goal = dailyGoalInput.value.trim();
-        if(goal.length>0){
-          goalStatus.textContent = `🎯 هدف اليوم: ${goal}`;
-          dailyGoalInput.value="";
-        }
-      }
+
+    dailyGoal.addEventListener("input", () => {
+      goalStatus.textContent = dailyGoal.value.trim() ? "✅ هدفك مسجل!" : "✍️ اكتب هدفك لليوم!";
     });
 
     const progressInput = document.getElementById("progressInput");
     const progressText = document.getElementById("progressText");
-    progressInput.addEventListener("input", ()=>{
+    const pointsDisplay = document.getElementById("pointsDisplay");
+
+    progressInput.addEventListener("input", () => {
       progressText.textContent = `إنجازك: ${progressInput.value}%`;
+      pointsDisplay.textContent = `⭐ نقاط التحفيز: ${Math.floor(progressInput.value/10*5)}`;
     });
 
-    const pointsDisplay = document.getElementById("pointsDisplay");
-    function updatePoints(){
-      const progress = parseInt(progressInput.value);
-      pointsDisplay.textContent = `⭐ نقاط التحفيز: ${progress} نقطة`;
-    }
-    progressInput.addEventListener("input", updatePoints);
+    setInterval(() => {
+      updateDate();
+      updateWeekNumber();
+      updateCountdown();
+    }, 1000);
 
-    setInterval(updateCountdown, 1000);
-    setInterval(updateDate, 1000);
-    setInterval(updateWeekNumber, 1000);
-    setInterval(changeTip, 12000);
-
-    // initial load
-    updateCountdown();
     updateDate();
     updateWeekNumber();
-    changeTip();
-    updatePoints();
-
+    updateCountdown();
   </script>
+
 </body>
 </html>
