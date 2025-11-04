@@ -1,252 +1,119 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📚 العد التنازلي للامتحانات</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
-
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Tajawal', 'Noto Color Emoji', sans-serif;
-      background: linear-gradient(135deg, #1e2a78, #4a47a3, #c4c1e0);
-      background-size: 400% 400%;
-      color: #fff;
-      text-align: center;
-      padding: 100px 20px 40px;
-      min-height: 100vh;
-      overflow-x: hidden;
-      animation: gradientShift 12s ease-in-out infinite alternate;
-      position: relative;
-      transition: background 0.5s, color 0.5s;
-    }
-    @keyframes gradientShift { 0% { background-position: left top; } 100% { background-position: right bottom; } }
-
-    body.light {
-      background: linear-gradient(135deg, #ffeedb, #f8cdda, #c4c1e0);
-      color: #333;
-    }
-    body.light .countdown { background: rgba(255,255,255,0.6); color: #222; }
-    body.light .progress-bar { background: #1e2a78; }
-    body.light .tip { color: #1e2a78; }
-
-    .top-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      border-bottom-left-radius: 15px;
-      border-bottom-right-radius: 15px;
-      z-index: 1000;
-      color: #f8f9fa;
-      font-weight: 600;
-      font-size: 1em;
-    }
-
-    .top-bar #weekNumber {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    #themeToggle {
-      background: none;
-      border: none;
-      font-size: 1.4em;
-      color: #fff;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-    #themeToggle:hover { transform: scale(1.2); }
-
-    h1 { font-size: 2.6em; margin-bottom: 25px; font-weight: 700; animation: fadeIn 1.5s ease; text-shadow: 0 2px 10px rgba(0,0,0,0.25); }
-
-    .countdown {
-      display: inline-block;
-      margin: 20px;
-      padding: 30px 25px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.1);
-      width: 280px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-      transition: transform 0.4s ease, background 0.4s ease;
-      animation: fadeUp 1.3s ease;
-      backdrop-filter: blur(8px);
-    }
-
-    .countdown:hover { transform: translateY(-8px) scale(1.05); background: rgba(255,255,255,0.25); }
-
-    .countdown h2 { font-size: 1.5em; margin-bottom: 15px; font-weight: 600; color: #ffe66d; }
-    .time { font-size: 1.8em; font-weight: bold; letter-spacing: 1px; animation: pulse 1.5s infinite; }
-
-    .progress-container { width: 100%; height: 10px; background: rgba(255,255,255,0.2); border-radius: 5px; margin: 10px 0 0; }
-    .progress-bar { height: 100%; background: #ffe66d; width: 0%; border-radius: 5px; transition: width 0.5s ease; }
-
-    .tip {
-      margin-top: 40px;
-      font-size: 1.3em;
-      color: #ffd966;
-      font-weight: 600;
-      transition: opacity 0.6s ease;
-    }
-
-    footer { margin-top: 60px; font-size: 1em; color: rgba(255,255,255,0.8); animation: fadeIn 2s ease; }
-    footer span { color: #ffe66d; font-weight: bold; }
-
-    @keyframes pulse { 0% { opacity:1; } 50% { opacity:0.7; } 100% { opacity:1; } }
-    @keyframes fadeIn { from { opacity:0; transform: translateY(-10px);} to { opacity:1; transform: translateY(0);} }
-    @keyframes fadeUp { from { opacity:0; transform: translateY(20px);} to { opacity:1; transform: translateY(0);} }
-
-    @media (max-width: 768px) {
-      body { padding: 80px 15px 40px; }
-      h1 { font-size: 2em; }
-      .countdown { width: 90%; padding: 20px 15px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📚 العد التنازلي للامتحانات</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Tajawal','Noto Color Emoji',sans-serif;background:linear-gradient(135deg,#1e2a78,#4a47a3,#c4c1e0);background-size:400% 400%;color:#fff;text-align:center;padding:100px 20px 40px;min-height:100vh;overflow-x:hidden;animation:gradientShift 12s ease-in-out infinite alternate;transition:background 0.5s,color 0.5s;}
+@keyframes gradientShift{0%{background-position:left top;}100%{background-position:right bottom;}}
+body.light{background:linear-gradient(135deg,#ffeedb,#f8cdda,#c4c1e0);color:#333;}
+body.light .countdown{background:rgba(255,255,255,0.6);color:#222;}
+body.light .progress-bar{background:#1e2a78;}
+body.light .tip{color:#1e2a78;}
+.top-bar{position:fixed;top:0;left:0;width:100%;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(0,0,0,0.2);border-bottom-left-radius:15px;border-bottom-right-radius:15px;z-index:1000;color:#f8f9fa;font-weight:600;font-size:1em;}
+.top-bar #weekNumber{position:absolute;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap;}
+#themeToggle{background:none;border:none;font-size:1.4em;color:#fff;cursor:pointer;transition:transform 0.3s ease;}
+#themeToggle:hover{transform:scale(1.2);}
+h1{font-size:2.6em;margin-bottom:25px;font-weight:700;animation:fadeIn 1.5s ease;text-shadow:0 2px 10px rgba(0,0,0,0.25);}
+.countdown{display:inline-block;margin:20px;padding:30px 25px;border-radius:20px;background:rgba(255,255,255,0.1);width:280px;box-shadow:0 8px 25px rgba(0,0,0,0.25);transition:transform 0.4s ease,background 0.4s ease;animation:fadeUp 1.3s ease;backdrop-filter:blur(8px);}
+.countdown:hover{transform:translateY(-8px) scale(1.05);background:rgba(255,255,255,0.25);}
+.countdown h2{font-size:1.5em;margin-bottom:15px;font-weight:600;color:#ffe66d;}
+.time{font-size:1.8em;font-weight:bold;letter-spacing:1px;animation:pulse 1.5s infinite;}
+.progress-container{width:100%;height:10px;background:rgba(255,255,255,0.2);border-radius:5px;margin:10px 0 0;}
+.progress-bar{height:100%;background:#ffe66d;width:0%;border-radius:5px;transition:width 0.5s ease;}
+.tip{margin-top:40px;font-size:1.3em;color:#ffd966;font-weight:600;transition:opacity 0.6s ease;}
+footer{margin-top:60px;font-size:1em;color:rgba(255,255,255,0.8);animation:fadeIn 2s ease;}
+footer span{color:#ffe66d;font-weight:bold;}
+@keyframes pulse{0%{opacity:1;}50%{opacity:0.7;}100%{opacity:1;}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@media (max-width:480px){.countdown{width:90%;padding:20px 15px;}h1{font-size:2em;}}
+input[type=text]{width:100%;padding:10px;border:none;border-radius:8px;text-align:center;font-size:1em;margin-top:10px;}
+input[type=range]{width:100%;margin-top:10px;}
+</style>
 </head>
 <body>
+<div class="top-bar">
+<div id="currentDate">جارٍ تحميل التاريخ...</div>
+<div id="weekNumber">جارٍ حساب الأسبوع...</div>
+<button id="themeToggle" title="تبديل الوضع">🌙</button>
+</div>
+<h1>📚 العد التنازلي للامتحانات</h1>
 
-  <div class="top-bar">
-    <div id="currentDate">جارٍ تحميل التاريخ...</div>
-    <div id="weekNumber">جارٍ حساب الأسبوع...</div>
-    <button id="themeToggle" title="تبديل الوضع">🌙</button>
-  </div>
+<div class="countdown">
+<h2>📝 امتحانات منتصف الفصل</h2>
+<div id="midterm" class="time">جارٍ الحساب...</div>
+<div class="progress-container"><div class="progress-bar" id="midtermProgress"></div></div>
+</div>
 
-  <h1>📚 العد التنازلي للامتحانات</h1>
+<div class="countdown">
+<h2>🎓 الامتحانات النهائية</h2>
+<div id="finals" class="time">جارٍ الحساب...</div>
+<div class="progress-container"><div class="progress-bar" id="finalsProgress"></div></div>
+</div>
 
-  <div class="countdown">
-    <h2>📝 امتحانات منتصف الفصل</h2>
-    <div id="midterm" class="time">جارٍ الحساب...</div>
-    <div class="progress-container">
-      <div class="progress-bar" id="midtermProgress"></div>
-    </div>
-  </div>
+<div class="countdown">
+<h2>🎯 هدف اليوم</h2>
+<input type="text" id="dailyGoal" placeholder="اكتب هدفك لليوم...">
+<p id="savedGoal" style="margin-top:10px;color:#ffe66d;font-weight:600;"></p>
+</div>
 
-  <div class="countdown">
-    <h2>🎓 الامتحانات النهائية</h2>
-    <div id="finals" class="time">جارٍ الحساب...</div>
-    <div class="progress-container">
-      <div class="progress-bar" id="finalsProgress"></div>
-    </div>
-  </div>
+<div class="countdown">
+<h2>📊 نسبة إنجاز المذاكرة</h2>
+<input type="range" id="progressInput" min="0" max="100" step="1">
+<p id="progressText">إنجازك: 0%</p>
+</div>
 
-  <div class="countdown">
-    <h2>🎯 هدف اليوم</h2>
-    <input type="text" id="dailyGoal" placeholder="اكتب هدفك لليوم..." style="width:100%; padding:10px; border:none; border-radius:8px; text-align:center; font-size:1em;">
-    <p id="savedGoal" style="margin-top:10px; color:#ffe66d; font-weight:600;">✍️ اكتب هدفك لليوم!</p>
-  </div>
+<div class="countdown">
+<h2>🏆 نقاط التحفيز</h2>
+<p id="pointsDisplay">جارٍ الحساب...</p>
+</div>
 
-  <div class="countdown">
-    <h2>📊 نسبة إنجاز المذاكرة</h2>
-    <input type="range" id="progressInput" min="0" max="100" step="1" style="width:100%;">
-    <p id="progressText">إنجازك: 0%</p>
-  </div>
+<div class="tip" id="dailyTip">جارٍ تحميل النصيحة...</div>
+<footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
 
-  <div class="countdown">
-    <h2>🏆 نقاط التحفيز</h2>
-    <p id="pointsDisplay">جارٍ الحساب...</p>
-  </div>
+<script>
+function toRiyadhTime(date){const utc=date.getTime()+date.getTimezoneOffset()*60000;const riyadhOffset=3*60*60000;return new Date(utc+riyadhOffset);}
+const semesterStart=new Date(Date.UTC(2025,8,7,0,0,0));
+const midtermDate=new Date(Date.UTC(2025,11,4,9,0,0));
+const finalsDate=new Date(Date.UTC(2026,0,4,9,0,0));
+function getNowRiyadh(){return toRiyadhTime(new Date());}
+function updateDate(){const now=getNowRiyadh();const options={weekday:'long',year:'numeric',month:'long',day:'numeric',timeZone:'Asia/Riyadh'};document.getElementById("currentDate").textContent=now.toLocaleDateString('ar-EG',options);}
+function updateWeekNumber(){const now=getNowRiyadh();const diff=now-semesterStart;let weekNumber=Math.ceil(diff/(1000*60*60*24*7));weekNumber+=2;const el=document.getElementById("weekNumber");if(weekNumber<1)el.textContent="⏳ الفصل لم يبدأ بعد";else if(weekNumber>16)el.textContent="🎉 انتهى الفصل الدراسي";else el.textContent=`📅 الأسبوع ${weekNumber}`;}
+function updateCountdown(){const now=getNowRiyadh().getTime();updateTimer("midterm",midtermDate-now,"🎯 بدأت امتحانات منتصف الفصل!",semesterStart.getTime(),midtermDate.getTime(),"midtermProgress");updateTimer("finals",finalsDate-now,"🏁 بدأت الامتحانات النهائية!",midtermDate.getTime(),finalsDate.getTime(),"finalsProgress");}
+function updateTimer(elementId,distance,message,start,end,progressId){const el=document.getElementById(elementId);const progressBar=document.getElementById(progressId);if(distance<0){el.innerHTML=message;el.style.color="#ffe66d";progressBar.style.width="100%";return;}const days=Math.floor(distance/(1000*60*60*24));const hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));const minutes=Math.floor((distance%(1000*60*60))/(1000*60));const seconds=Math.floor((distance%(1000*60))/1000);el.innerHTML=`${days} يوم ${hours} ساعة ${minutes} دقيقة ${seconds} ثانية`;const totalDuration=end-start;const elapsed=new Date().getTime()-start;const progress=Math.min(Math.max((elapsed/totalDuration)*100,0),100);progressBar.style.width=progress+"%";}
+const tips=["📖 راجع ملخصات الدروس كل يوم","⏱️ خصص وقتًا للراحة بين المذاكرة","📝 حل أسئلة سابقة للتدرب","☕ اشرب الماء وابتعد عن السهر الزائد","💪 ثق بنفسك، أنت قادر على النجاح!","😴 احرص على النوم الكافي","📚 نظم وقتك ولا تؤجل مهامك","🤝 شارك زملاءك في المراجعة"];
+let tipIndex=0;
+const tipElement=document.getElementById("dailyTip");
+function changeTip(){tipElement.style.opacity=0;setTimeout(()=>{tipIndex=(tipIndex+1)%tips.length;tipElement.textContent=tips[tipIndex];tipElement.style.opacity=1;},600);}
+const themeButton=document.getElementById("themeToggle");
+function toggleTheme(){document.body.classList.toggle("light");const mode=document.body.classList.contains("light")?"light":"dark";themeButton.textContent=mode==="light"?"☀️":"🌙";localStorage.setItem("theme",mode);}
+if(localStorage.getItem("theme")==="light"){document.body.classList.add("light");themeButton.textContent="☀️";}
+themeButton.addEventListener("click",toggleTheme);
 
-  <div class="tip" id="dailyTip">جارٍ تحميل النصيحة...</div>
+const goalInput=document.getElementById("dailyGoal");
+const savedGoal=document.getElementById("savedGoal");
+goalInput.value=localStorage.getItem("goal")||"";
+savedGoal.textContent=goalInput.value?`🎓 هدفك: ${goalInput.value}`:"✍️ اكتب هدفك لليوم!";
+goalInput.addEventListener("keypress",(e)=>{if(e.key==="Enter"){e.preventDefault();const value=goalInput.value.trim();if(value!==""){savedGoal.textContent=`🎯 هدفك: ${value}`;localStorage.setItem("goal",value);goalInput.value="";}}});
 
-  <footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
+const progressInput=document.getElementById("progressInput");
+const progressText=document.getElementById("progressText");
+progressInput.value=localStorage.getItem("studyProgress")||0;
+progressText.textContent=`إنجازك: ${progressInput.value}%`;
+progressInput.addEventListener("input",()=>{progressText.textContent=`إنجازك: ${progressInput.value}%`;localStorage.setItem("studyProgress",progressInput.value);});
 
-  <script>
-    function toRiyadhTime(date){
-      const utc = date.getTime() + date.getTimezoneOffset() * 60000;
-      const riyadhOffset = 3*60*60000;
-      return new Date(utc + riyadhOffset);
-    }
+const pointsDisplay=document.getElementById("pointsDisplay");
+let points=Number(localStorage.getItem("dailyPoints"))||0;
+const todayKey="points-"+new Date().toISOString().split("T")[0];
+if(!localStorage.getItem(todayKey)){points++;localStorage.setItem(todayKey,"1");localStorage.setItem("dailyPoints",points);}
+pointsDisplay.textContent=`🏆 ${points} نقاط`;
 
-    const semesterStart = new Date(Date.UTC(2025, 8, 7, 0, 0, 0));
-    const midtermDate = new Date(Date.UTC(2025, 11, 4, 9, 0, 0));
-    const finalsDate = new Date(Date.UTC(2026, 0, 4, 9, 0, 0));
-
-    function getNowRiyadh(){ return toRiyadhTime(new Date()); }
-
-    function updateDate(){
-      const now = getNowRiyadh();
-      const options = { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'Asia/Riyadh' };
-      document.getElementById("currentDate").textContent = now.toLocaleDateString('ar-EG', options);
-    }
-
-    function updateWeekNumber(){
-      const now = getNowRiyadh();
-      const diff = now - semesterStart;
-      let weekNumber = Math.ceil(diff / (1000*60*60*24*7)) + 2;
-      const el = document.getElementById("weekNumber");
-      if(weekNumber<1) el.textContent = "⏳ الفصل لم يبدأ بعد";
-      else if(weekNumber>16) el.textContent = "🎉 انتهى الفصل الدراسي";
-      else el.textContent = `📅 الأسبوع ${weekNumber}`;
-    }
-
-    function updateCountdown(){
-      const now = getNowRiyadh().getTime();
-      updateTimer("midterm", midtermDate - now, "🎯 بدأت امتحانات منتصف الفصل!", semesterStart.getTime(), midtermDate.getTime(), "midtermProgress");
-      updateTimer("finals", finalsDate - now, "🏁 بدأت الامتحانات النهائية!", midtermDate.getTime(), finalsDate.getTime(), "finalsProgress");
-    }
-
-    function updateTimer(elementId,distance,message,start,end,progressId){
-      const el = document.getElementById(elementId);
-      const progressBar = document.getElementById(progressId);
-      if(distance<0){
-        el.innerHTML = message;
-        progressBar.style.width = "100%";
-        return;
-      }
-      const days = Math.floor(distance/(1000*60*60*24));
-      const hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-      const minutes = Math.floor((distance%(1000*60*60))/(1000*60));
-      const seconds = Math.floor((distance%(1000*60))/1000);
-      el.innerHTML = `${days} يوم ${hours} ساعة ${minutes} دقيقة ${seconds} ثانية`;
-
-      const totalDuration = end - start;
-      const elapsed = new Date().getTime() - start;
-      const progress = Math.min(Math.max((elapsed/totalDuration)*100,0),100);
-      progressBar.style.width = `${progress}%`;
-    }
-
-    document.getElementById("themeToggle").addEventListener("click",()=>{
-      document.body.classList.toggle("light");
-    });
-
-    const dailyGoalInput = document.getElementById("dailyGoal");
-    const savedGoal = document.getElementById("savedGoal");
-
-    dailyGoalInput.addEventListener("keydown", (e)=>{
-      if(e.key === "Enter"){
-        savedGoal.textContent = `🎯 هدف اليوم: ${dailyGoalInput.value}`;
-        dailyGoalInput.value = "";
-      }
-    });
-
-    const progressInput = document.getElementById("progressInput");
-    const progressText = document.getElementById("progressText");
-    progressInput.addEventListener("input", ()=>{
-      progressText.textContent = `إنجازك: ${progressInput.value}%`;
-    });
-
-    const pointsDisplay = document.getElementById("pointsDisplay");
-    function updatePoints(){ pointsDisplay.textContent = `${Math.floor(Math.random()*500)+50} نقطة تحفيز`; }
-
-    const tips = ["خذ قسطاً من الراحة كل ساعة ⏱️","راجع ملخصك قبل النوم 📝","ابدأ بالمهام الصعبة أولاً 💪","اكتب هدفك اليومي 🎯"];
-    const dailyTip = document.getElementById("dailyTip");
-    function updateTip(){ dailyTip.textContent = tips[Math.floor(Math.random()*tips.length)]; }
-
-    setInterval(()=>{ updateDate(); updateWeekNumber(); updateCountdown(); updatePoints(); updateTip(); },1000);
-    updateDate(); updateWeekNumber(); updateCountdown(); updatePoints(); updateTip();
-  </script>
-
+setInterval(()=>{updateDate();updateWeekNumber();updateCountdown();changeTip();},1000);
+updateDate();updateWeekNumber();updateCountdown();
+</script>
 </body>
 </html>
