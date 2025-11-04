@@ -1,368 +1,220 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>📚 العد التنازلي للامتحانات</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {box-sizing:border-box;margin:0;padding:0;}
     body {
-      font-family: 'Tajawal', 'Noto Color Emoji', sans-serif;
-      overflow-x: hidden;
+      font-family:'Tajawal','Noto Color Emoji',sans-serif;
+      background:linear-gradient(135deg,#2c3e50,#4a47a3,#c4c1e0);
+      background-size:300% 300%;
+      color:#fff;
+      min-height:100vh;
+      overflow-x:hidden;
+      transition:background 0.5s,color 0.5s;
+      animation:gradientMove 20s ease-in-out infinite alternate;
+    }
+    @keyframes gradientMove {
+      0% {background-position:left top;}
+      100% {background-position:right bottom;}
     }
 
-    /* إخفاء كلا النظامين أولاً */
-    #pcVersion, #mobileVersion { display: none; }
-
-    /* ✅ نظام الكمبيوتر */
-    #pcVersion {
-      text-align: center;
-      color: #fff;
-      padding: 100px 20px 40px;
-      background: linear-gradient(135deg, #1e2a78, #4a47a3, #c4c1e0);
-      background-size: 400% 400%;
-      animation: gradientShift 12s ease-in-out infinite alternate;
-      min-height: 100vh;
-      transition: background 0.5s, color 0.5s;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: left top; }
-      100% { background-position: right bottom; }
-    }
-
-    #pcVersion.light {
-      background: linear-gradient(135deg, #ffeedb, #f8cdda, #c4c1e0);
-      color: #333;
-    }
-
+    /* الشريط العلوي */
     .top-bar {
-      position: fixed;
-      top: 0; left: 0; width: 100%;
-      padding: 10px 20px;
-      display: flex; justify-content: space-between; align-items: center;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
-      z-index: 1000;
-      color: #f8f9fa;
-      font-weight: 600;
+      position:fixed;top:0;left:0;width:100%;
+      padding:10px 30px;
+      display:flex;justify-content:space-between;align-items:center;
+      background:rgba(0,0,0,0.3);
+      backdrop-filter:blur(8px);
+      box-shadow:0 4px 12px rgba(0,0,0,0.3);
+      z-index:1000;color:#f8f9fa;font-weight:600;
+      border-bottom-left-radius:15px;border-bottom-right-radius:15px;
+    }
+    .top-bar #weekNumber {position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;}
+    #themeToggle {
+      background:none;border:none;font-size:1.5em;color:#fff;cursor:pointer;
+      transition:transform 0.3s;
+    }
+    #themeToggle:hover{transform:scale(1.15);}
+
+    /* عنوان */
+    h1 {
+      font-size:2.8em;
+      text-align:center;
+      margin-top:90px;
+      margin-bottom:30px;
+      font-weight:700;
+      text-shadow:0 3px 10px rgba(0,0,0,0.3);
+      animation:fadeIn 1.2s ease;
     }
 
-    .top-bar #weekNumber {
-      position: absolute; left: 50%; transform: translateX(-50%);
+    /* شبكة البطاقات */
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:25px;
+      width:90%;
+      margin:0 auto;
+      justify-items:center;
     }
 
-    #pcVersion button {
-      background: none; border: none; color: #fff; font-size: 1.4em; cursor: pointer;
-      transition: transform 0.3s ease;
+    /* بطاقة */
+    .card {
+      background:rgba(255,255,255,0.1);
+      border-radius:18px;
+      padding:25px 20px;
+      width:100%;
+      box-shadow:0 8px 20px rgba(0,0,0,0.25);
+      text-align:center;
+      backdrop-filter:blur(6px);
+      transition:transform 0.3s,background 0.3s;
     }
-    #pcVersion button:hover { transform: scale(1.2); }
+    .card:hover {transform:translateY(-5px) scale(1.02);background:rgba(255,255,255,0.18);}
+    .card h2 {font-size:1.5em;margin-bottom:15px;color:#ffe66d;}
+    .time {font-size:1.8em;font-weight:bold;animation:pulse 2s infinite;}
+    @keyframes pulse{0%{opacity:1;}50%{opacity:0.7;}100%{opacity:1;}}
+    .progress-container{width:100%;height:10px;background:rgba(255,255,255,0.3);border-radius:5px;margin-top:10px;}
+    .progress-bar{height:100%;background:#ffe66d;width:0%;border-radius:5px;transition:width 0.5s;}
 
-    h1 { font-size: 2.6em; margin: 25px 0; font-weight: 700; }
-
-    .countdown {
-      display: inline-block;
-      margin: 20px;
-      padding: 30px 25px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.1);
-      width: 280px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-      transition: transform 0.4s ease, background 0.4s ease;
-      backdrop-filter: blur(8px);
+    /* العناصر النصية */
+    input[type="text"], input[type="range"] {
+      width:90%;padding:10px;border:none;border-radius:8px;text-align:center;
+      font-size:1em;margin-top:8px;
     }
+    #progressText {margin-top:10px;font-weight:600;}
+    footer {margin-top:60px;text-align:center;color:rgba(255,255,255,0.85);font-size:1.1em;}
+    footer span{color:#ffe66d;font-weight:bold;}
+    .tip{margin-top:30px;font-size:1.2em;color:#ffd966;font-weight:600;transition:opacity 0.6s;}
 
-    .countdown:hover { transform: translateY(-8px) scale(1.05); background: rgba(255,255,255,0.25); }
-    .countdown h2 { font-size: 1.5em; margin-bottom: 15px; font-weight: 600; color: #ffe66d; }
-    .time { font-size: 1.8em; font-weight: bold; letter-spacing: 1px; }
-
-    .progress-container { width: 100%; height: 10px; background: rgba(255,255,255,0.2); border-radius: 5px; margin-top: 10px; }
-    .progress-bar { height: 100%; background: #ffe66d; width: 0%; border-radius: 5px; transition: width 0.5s ease; }
-
-    .tip {
-      margin-top: 40px;
-      font-size: 1.3em;
-      color: #ffd966;
-      font-weight: 600;
-      transition: opacity 0.6s ease;
-    }
-
-    footer { margin-top: 60px; font-size: 1em; color: rgba(255,255,255,0.8); }
-    footer span { color: #ffe66d; font-weight: bold; }
-
-    #pcVersion.light .countdown { background: rgba(255,255,255,0.6); color: #222; }
-    #pcVersion.light .progress-bar { background: #1e2a78; }
-    #pcVersion.light .tip { color: #1e2a78; }
-
-    @media (max-width: 480px) {
-      .countdown { width: 90%; padding: 20px 15px; }
-      h1 { font-size: 2em; }
-    }
-
-    /* ✅ نظام الجوال */
-    #mobileVersion {
-      text-align: center;
-      color: #222;
-      background: linear-gradient(135deg, #e3e7ff, #f8f9ff);
-      padding: 90px 20px 50px;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    #mobileVersion h1 { font-size: 2em; margin-bottom: 20px; color: #2b2b80; }
-
-    #mobileVersion .countdown {
-      background: #fff;
-      margin: 10px auto;
-      border-radius: 12px;
-      padding: 20px;
-      width: 90%;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      color: #333;
-    }
-
-    #mobileVersion .countdown h2 { font-size: 1.2em; color: #1e2a78; margin-bottom: 10px; }
-    #mobileVersion .time { font-size: 1.2em; font-weight: bold; color: #000; }
-
-    #mobileVersion .progress-container { height: 8px; background: #eee; border-radius: 5px; margin-top: 8px; }
-    #mobileVersion .progress-bar { height: 100%; background: #4a47a3; width: 0%; border-radius: 5px; }
-
-    #mobileVersion input[type="text"], #mobileVersion input[type="range"] {
-      width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
-      text-align: center;
-      font-size: 1em;
-      outline: none;
-    }
-
-    #mobileVersion .tip {
-      margin-top: 25px;
-      color: #4a47a3;
-      font-weight: 600;
-      font-size: 1.1em;
-    }
-
-    #mobileVersion footer {
-      margin-top: 40px;
-      color: #555;
-      font-size: 0.9em;
+    @keyframes fadeIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+    body.light{background:linear-gradient(135deg,#f8e9dd,#f3d1f4,#d7d2f5);color:#333;}
+    body.light .card{background:rgba(255,255,255,0.7);color:#222;}
+    body.light .progress-bar{background:#4a47a3;}
+    body.light .tip{color:#4a47a3;}
+    body.light #themeToggle{color:#333;}
+    body.light .top-bar{background:rgba(255,255,255,0.3);}
+    
+    /* نسخة الجوال (مخفية هنا) */
+    #mobileVersion{display:none;}
+    @media(max-width:768px){
+      #pcVersion{display:none;}
+      #mobileVersion{display:block;}
     }
   </style>
 </head>
 <body>
 
-  <!-- 🖥️ نظام الكمبيوتر -->
-  <div id="pcVersion">
-    <div class="top-bar">
-      <div id="pcDate">جارٍ تحميل التاريخ...</div>
-      <div id="pcWeek">جارٍ حساب الأسبوع...</div>
-      <button id="themeTogglePC" title="تبديل الوضع">🌙</button>
-    </div>
+<!-- 💻 نسخة الكمبيوتر -->
+<div id="pcVersion">
+  <div class="top-bar">
+    <div id="currentDate">جارٍ تحميل التاريخ...</div>
+    <div id="weekNumber">جارٍ حساب الأسبوع...</div>
+    <button id="themeToggle" title="تبديل الوضع">🌙</button>
+  </div>
 
-    <h1>📚 العد التنازلي للامتحانات</h1>
+  <h1>📚 لوحة العد التنازلي للامتحانات</h1>
 
-    <div class="countdown">
+  <div class="grid">
+    <div class="card">
       <h2>📝 امتحانات منتصف الفصل</h2>
-      <div id="midtermPC" class="time">جارٍ الحساب...</div>
-      <div class="progress-container"><div class="progress-bar" id="midtermProgressPC"></div></div>
+      <div id="midterm" class="time">جارٍ الحساب...</div>
+      <div class="progress-container"><div class="progress-bar" id="midtermProgress"></div></div>
     </div>
 
-    <div class="countdown">
+    <div class="card">
       <h2>🎓 الامتحانات النهائية</h2>
-      <div id="finalsPC" class="time">جارٍ الحساب...</div>
-      <div class="progress-container"><div class="progress-bar" id="finalsProgressPC"></div></div>
+      <div id="finals" class="time">جارٍ الحساب...</div>
+      <div class="progress-container"><div class="progress-bar" id="finalsProgress"></div></div>
     </div>
 
-    <div class="countdown">
+    <div class="card">
       <h2>🎯 هدف اليوم</h2>
-      <input type="text" id="goalPC" placeholder="اكتب هدفك لليوم...">
-      <p id="goalTextPC"></p>
+      <input type="text" id="dailyGoal" placeholder="اكتب هدفك لليوم...">
+      <p id="goalStatus" style="margin-top:10px;color:#ffe66d;font-weight:600;"></p>
     </div>
 
-    <div class="countdown">
+    <div class="card">
       <h2>📊 نسبة إنجاز المذاكرة</h2>
-      <input type="range" id="progressPC" min="0" max="100" step="1">
-      <p id="progressTextPC">0%</p>
+      <input type="range" id="progressInput" min="0" max="100" step="1">
+      <p id="progressText">إنجازك: 0%</p>
     </div>
 
-    <div class="countdown">
+    <div class="card">
       <h2>🏆 نقاط التحفيز</h2>
-      <p id="pointsPC">جارٍ الحساب...</p>
+      <p id="pointsDisplay">جارٍ الحساب...</p>
     </div>
-
-    <div class="tip" id="tipPC">📖 راجع ملخصات الدروس كل يوم</div>
-
-    <footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
   </div>
 
-  <!-- 📱 نظام الجوال -->
-  <div id="mobileVersion">
-    <h1>📚 العد التنازلي للامتحانات</h1>
+  <div class="tip" id="dailyTip">جارٍ تحميل النصيحة...</div>
+  <footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
+</div>
 
-    <div class="countdown">
-      <h2>📝 منتصف الفصل</h2>
-      <div id="midtermM" class="time">جارٍ الحساب...</div>
-      <div class="progress-container"><div class="progress-bar" id="midtermProgressM"></div></div>
-    </div>
-
-    <div class="countdown">
-      <h2>🎓 النهائية</h2>
-      <div id="finalsM" class="time">جارٍ الحساب...</div>
-      <div class="progress-container"><div class="progress-bar" id="finalsProgressM"></div></div>
-    </div>
-
-    <div class="countdown">
-      <h2>🎯 هدف اليوم</h2>
-      <input type="text" id="goalM" placeholder="اكتب هدفك لليوم...">
-      <p id="goalTextM"></p>
-    </div>
-
-    <div class="countdown">
-      <h2>📊 نسبة إنجازك</h2>
-      <input type="range" id="progressM" min="0" max="100" step="1">
-      <p id="progressTextM">0%</p>
-    </div>
-
-    <div class="countdown">
-      <h2>🏆 نقاط التحفيز</h2>
-      <p id="pointsM">جارٍ الحساب...</p>
-    </div>
-
-    <div class="tip" id="tipM">📖 راجع دروسك يوميًا</div>
-
-    <footer>✨ بالتوفيق في امتحاناتك 💪</footer>
+<!-- 📱 نسخة الجوال (كما هي خفيفة وسريعة) -->
+<div id="mobileVersion">
+  <div style="padding:60px 15px;text-align:center;">
+    <h2>📚 العد التنازلي للامتحانات</h2>
+    <div id="mContent">جارٍ التحميل...</div>
   </div>
+</div>
 
-  <script>
-    // ✅ تحديد النظام
-    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    const pc = document.getElementById("pcVersion");
-    const mobile = document.getElementById("mobileVersion");
-    if (isMobile) {
-      mobile.style.display = "block";
-      runMobileSystem();
-    } else {
-      pc.style.display = "block";
-      runPCSystem();
-    }
+<script>
+  /* ⚙️ كشف الجهاز */
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  document.getElementById("pcVersion").style.display = isMobile ? "none" : "block";
+  document.getElementById("mobileVersion").style.display = isMobile ? "block" : "none";
 
-    // ==================== 🖥️ نظام الكمبيوتر ====================
-    function runPCSystem() {
-      const semesterStart = new Date(Date.UTC(2025, 8, 7));
-      const midterm = new Date(Date.UTC(2025, 11, 4, 9));
-      const finals = new Date(Date.UTC(2026, 0, 4, 9));
+  /* 📆 PC FUNCTIONS */
+  if(!isMobile){
+    function toRiyadhTime(date){const utc=date.getTime()+date.getTimezoneOffset()*60000;return new Date(utc+3*60*60000);}
+    const semesterStart=new Date(Date.UTC(2025,8,7)),midtermDate=new Date(Date.UTC(2025,11,4,9)),finalsDate=new Date(Date.UTC(2026,0,4,9));
+    const getNow=()=>toRiyadhTime(new Date());
+    const updateDate=()=>{const n=getNow();document.getElementById("currentDate").textContent=n.toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
+    const updateWeek=()=>{const n=getNow(),diff=n-semesterStart,w=Math.ceil(diff/(1000*60*60*24*7))+2,el=document.getElementById("weekNumber");
+      if(w<1)el.textContent="⏳ الفصل لم يبدأ بعد";else if(w>16)el.textContent="🎉 انتهى الفصل الدراسي";else el.textContent=`📅 الأسبوع ${w}`;}
+    const updateTimer=(id,dist,msg,start,end,progId)=>{
+      const el=document.getElementById(id),prog=document.getElementById(progId);
+      if(dist<0){el.textContent=msg;prog.style.width="100%";return;}
+      const d=Math.floor(dist/(1000*60*60*24)),h=Math.floor((dist%(1000*60*60*24))/(1000*60*60)),m=Math.floor((dist%(1000*60*60))/(1000*60)),s=Math.floor((dist%(1000*60))/1000);
+      el.innerHTML=`${d}ي ${h}س ${m}د ${s}ث`;
+      const total=end-start,elapsed=new Date().getTime()-start,progress=Math.min(Math.max((elapsed/total)*100,0),100);
+      prog.style.width=progress+"%";
+    };
+    const updateCountdown=()=>{
+      const now=getNow().getTime();
+      updateTimer("midterm",midtermDate-now,"🎯 بدأت امتحانات منتصف الفصل!",semesterStart.getTime(),midtermDate.getTime(),"midtermProgress");
+      updateTimer("finals",finalsDate-now,"🏁 بدأت الامتحانات النهائية!",midtermDate.getTime(),finalsDate.getTime(),"finalsProgress");
+    };
+    const tips=["📖 راجع ملخصات الدروس","⏱️ خصص وقتًا للراحة","📝 حل أسئلة سابقة","☕ لا تسهر كثيرًا","💪 ثق بنفسك!","😴 نم كفاية","📚 نظم وقتك","🤝 ذاكر مع أصدقائك"];
+    let t=0;setInterval(()=>{const el=document.getElementById("dailyTip");el.style.opacity=0;setTimeout(()=>{t=(t+1)%tips.length;el.textContent=tips[t];el.style.opacity=1;},500);},6000);
+    const theme=document.getElementById("themeToggle");
+    const setTheme=(m)=>{document.body.classList.toggle("light",m==="light");theme.textContent=m==="light"?"☀️":"🌙";localStorage.setItem("theme",m);}
+    setTheme(localStorage.getItem("theme")||"dark");
+    theme.onclick=()=>setTheme(document.body.classList.contains("light")?"dark":"light");
+    const goal=document.getElementById("dailyGoal"),gs=document.getElementById("goalStatus");
+    goal.value=localStorage.getItem("goal")||"";gs.textContent=goal.value?`🎯 هدفك: ${goal.value}`:"✍️ اكتب هدفك لليوم!";
+    goal.onchange=()=>{localStorage.setItem("goal",goal.value);gs.textContent=`🎯 هدفك: ${goal.value}`;};
+    const pr=document.getElementById("progressInput"),pt=document.getElementById("progressText");
+    pr.value=localStorage.getItem("studyProgress")||0;pt.textContent=`إنجازك: ${pr.value}%`;
+    pr.oninput=()=>{pt.textContent=`إنجازك: ${pr.value}%`;localStorage.setItem("studyProgress",pr.value);};
+    const pd=document.getElementById("pointsDisplay");let pts=parseInt(localStorage.getItem("motivationPoints")||"0");const today=new Date().toDateString();
+    if(localStorage.getItem("lastVisit")!==today){pts++;localStorage.setItem("motivationPoints",pts);localStorage.setItem("lastVisit",today);}
+    pd.textContent=`⭐ عدد زياراتك: ${pts}`;
+    const updateAll=()=>{updateDate();updateWeek();updateCountdown();}
+    setInterval(updateAll,1000);updateAll();
+  }
 
-      const toRiyadh = d => new Date(d.getTime() + (3 * 60 - d.getTimezoneOffset()) * 60000);
-      const pcDate = document.getElementById("pcDate");
-      const pcWeek = document.getElementById("pcWeek");
-      const tips = ["📖 راجع ملخصاتك", "💧 اشرب الماء", "🕒 نظم وقتك", "💪 ثق بنفسك", "📚 لا تؤجل المذاكرة"];
-      let t = 0;
-
-      const update = () => {
-        const now = toRiyadh(new Date());
-        pcDate.textContent = now.toLocaleDateString('ar-EG', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
-        const diff = now - semesterStart;
-        let week = Math.ceil(diff / (7 * 24 * 60 * 60 * 1000)) + 2;
-        pcWeek.textContent = week < 1 ? "⏳ لم يبدأ الفصل" : week > 16 ? "🎉 انتهى الفصل" : `📅 الأسبوع ${week}`;
-        const upd = (id, d, msg, s, e, bar) => {
-          const el = document.getElementById(id), pb = document.getElementById(bar);
-          if (d < 0) { el.textContent = msg; pb.style.width = "100%"; return; }
-          const days = Math.floor(d / 86400000);
-          const h = Math.floor((d % 86400000)/3600000);
-          const m = Math.floor((d % 3600000)/60000);
-          el.textContent = `${days}ي ${h}س ${m}د`;
-          const pr = Math.min(Math.max((now - s) / (e - s) * 100, 0), 100);
-          pb.style.width = pr + "%";
-        };
-        upd("midtermPC", midterm - now, "🎯 بدأت!", semesterStart, midterm, "midtermProgressPC");
-        upd("finalsPC", finals - now, "🏁 بدأت!", midterm, finals, "finalsProgressPC");
-      };
-      setInterval(update, 1000); update();
-
-      const goal = document.getElementById("goalPC"), goalText = document.getElementById("goalTextPC");
-      goal.value = localStorage.getItem("goalPC") || "";
-      goalText.textContent = goal.value ? `🎯 هدفك: ${goal.value}` : "✍️ اكتب هدفك!";
-      goal.addEventListener("change", () => { localStorage.setItem("goalPC", goal.value); goalText.textContent = `🎯 هدفك: ${goal.value}`; });
-
-      const prog = document.getElementById("progressPC"), progT = document.getElementById("progressTextPC");
-      prog.value = localStorage.getItem("progPC") || 0;
-      progT.textContent = `${prog.value}%`;
-      prog.addEventListener("input", () => { localStorage.setItem("progPC", prog.value); progT.textContent = `${prog.value}%`; });
-
-      const pts = document.getElementById("pointsPC");
-      let p = parseInt(localStorage.getItem("ptsPC") || "0");
-      const today = new Date().toDateString();
-      if (localStorage.getItem("lastPC") !== today) {
-        p++; localStorage.setItem("ptsPC", p); localStorage.setItem("lastPC", today);
-      }
-      pts.textContent = `⭐ زياراتك: ${p}`;
-
-      const tip = document.getElementById("tipPC");
-      setInterval(() => { t = (t + 1) % tips.length; tip.textContent = tips[t]; }, 6000);
-
-      const toggle = document.getElementById("themeTogglePC");
-      toggle.addEventListener("click", () => {
-        document.getElementById("pcVersion").classList.toggle("light");
-        const mode = document.getElementById("pcVersion").classList.contains("light") ? "light" : "dark";
-        toggle.textContent = mode === "light" ? "☀️" : "🌙";
-        localStorage.setItem("themePC", mode);
-      });
-      if (localStorage.getItem("themePC") === "light") {
-        document.getElementById("pcVersion").classList.add("light");
-        toggle.textContent = "☀️";
-      }
-    }
-
-    // ==================== 📱 نظام الجوال ====================
-    function runMobileSystem() {
-      const semesterStart = new Date(Date.UTC(2025, 8, 7));
-      const midterm = new Date(Date.UTC(2025, 11, 4, 9));
-      const finals = new Date(Date.UTC(2026, 0, 4, 9));
-      const tips = ["📖 ذاكر كل يوم", "💧 اشرب الماء", "💤 خذ راحة", "💪 ثق بنفسك", "📝 حل الأسئلة السابقة"];
-      let t = 0;
-
-      const update = () => {
-        const now = new Date();
-        const upd = (id, d, msg, s, e, bar) => {
-          const el = document.getElementById(id), pb = document.getElementById(bar);
-          if (d < 0) { el.textContent = msg; pb.style.width = "100%"; return; }
-          const days = Math.floor(d / 86400000);
-          el.textContent = `${days} يوم`;
-          const pr = Math.min(Math.max((now - s) / (e - s) * 100, 0), 100);
-          pb.style.width = pr + "%";
-        };
-        upd("midtermM", midterm - now, "🎯 بدأت!", semesterStart, midterm, "midtermProgressM");
-        upd("finalsM", finals - now, "🏁 بدأت!", midterm, finals, "finalsProgressM");
-      };
-      setInterval(update, 60000); update();
-
-      const goal = document.getElementById("goalM"), goalText = document.getElementById("goalTextM");
-      goal.value = localStorage.getItem("goalM") || "";
-      goalText.textContent = goal.value ? `🎯 هدفك: ${goal.value}` : "✍️ اكتب هدفك!";
-      goal.addEventListener("change", () => { localStorage.setItem("goalM", goal.value); goalText.textContent = `🎯 هدفك: ${goal.value}`; });
-
-      const prog = document.getElementById("progressM"), progT = document.getElementById("progressTextM");
-      prog.value = localStorage.getItem("progM") || 0;
-      progT.textContent = `${prog.value}%`;
-      prog.addEventListener("input", () => { localStorage.setItem("progM", prog.value); progT.textContent = `${prog.value}%`; });
-
-      const pts = document.getElementById("pointsM");
-      let p = parseInt(localStorage.getItem("ptsM") || "0");
-      const today = new Date().toDateString();
-      if (localStorage.getItem("lastM") !== today) {
-        p++; localStorage.setItem("ptsM", p); localStorage.setItem("lastM", today);
-      }
-      pts.textContent = `⭐ زياراتك: ${p}`;
-
-      const tip = document.getElementById("tipM");
-      setInterval(() => { t = (t + 1) % tips.length; tip.textContent = tips[t]; }, 6000);
-    }
-  </script>
+  /* 📱 نسخة الجوال */
+  if(isMobile){
+    document.getElementById("mContent").innerHTML=`
+      <div style='font-size:1.2em;color:#222;background:#fff9;border-radius:10px;padding:20px;box-shadow:0 0 8px #ccc;'>
+        <p>🎓 أهلاً بك! هذه النسخة خفيفة وسريعة للهاتف.</p>
+        <p style='margin-top:10px;'>افتح الموقع من الكمبيوتر لتجربة النسخة الكاملة 💻</p>
+      </div>`;
+  }
+</script>
 </body>
 </html>
