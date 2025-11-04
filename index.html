@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -159,7 +160,11 @@
 <div id="mobileVersion">
   <div style="padding:60px 15px;text-align:center;">
     <h2>📚 العد التنازلي للامتحانات</h2>
-    <div id="mContent">جارٍ التحميل...</div>
+    <div id="mContent">
+      <p>📝 امتحانات منتصف الفصل: جارٍ الحساب...</p>
+      <p>🎓 الامتحانات النهائية: جارٍ الحساب...</p>
+      <p>📅 افتح الموقع من الكمبيوتر لتجربة النسخة الكاملة 💻</p>
+    </div>
   </div>
 </div>
 
@@ -219,21 +224,12 @@ if(!isMobile){
   setInterval(updateAll,1000);updateAll();
 }
 
-/* نسخة الهاتف */
+/* نسخة الهاتف الأصلية */
 if(isMobile){
-  const now = new Date();
-  const semesterStart=new Date(Date.UTC(2025,8,7)),midtermDate=new Date(Date.UTC(2025,11,4,9)),finalsDate=new Date(Date.UTC(2026,0,4,9));
-  const toRiyadhTime = d => new Date(d.getTime() + (d.getTimezoneOffset()*60000) + 3*3600000);
-  const today = toRiyadhTime(now).getTime();
-  const midtermDays = Math.max(0, Math.ceil((midtermDate.getTime()-today)/(1000*60*60*24)));
-  const finalsDays = Math.max(0, Math.ceil((finalsDate.getTime()-today)/(1000*60*60*24)));
-
   document.getElementById("mContent").innerHTML = `
-    <div style='font-size:1.2em;color:#222;background:#fff9;border-radius:10px;padding:20px;box-shadow:0 0 8px #ccc;'>
-      <p>📝 أيام حتى امتحانات منتصف الفصل: <b>${midtermDays}</b> يوم</p>
-      <p>🎓 أيام حتى الامتحانات النهائية: <b>${finalsDays}</b> يوم</p>
-      <p style='margin-top:10px;'>افتح الموقع من الكمبيوتر لتجربة النسخة الكاملة 💻</p>
-    </div>`;
+    <p>📝 امتحانات منتصف الفصل: جارٍ الحساب...</p>
+    <p>🎓 الامتحانات النهائية: جارٍ الحساب...</p>
+    <p>📅 افتح الموقع من الكمبيوتر لتجربة النسخة الكاملة 💻</p>`;
 }
 </script>
 </body>
