@@ -112,6 +112,17 @@
       .countdown { width: 90%; padding: 20px 15px; }
       h1 { font-size: 2em; }
     }
+
+    /* خانة الهدف سطر واحد */
+    #dailyGoal {
+      width: 90%;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 1em;
+      border: none;
+      height: 38px; /* يكفي لسطر واحد */
+    }
   </style>
 </head>
 <body>
@@ -142,8 +153,7 @@
 
   <div class="countdown" style="width:300px; margin-top:20px;">
     <h2>🎯 هدف اليوم</h2>
-    <textarea id="dailyGoal" placeholder="اكتب هدفك لليوم..." rows="1" style="width:100%; padding:10px; font-size:1em; border-radius:8px; border:none; resize:none;"></textarea>
-    <p id="goalStatus" style="margin-top:10px; color:#ffe66d; font-weight:600;">✍️ اكتب هدفك لليوم!</p>
+    <input type="text" id="dailyGoal" placeholder="اكتب هدفك لليوم...">
   </div>
 
   <div class="countdown" style="width:300px; margin-top:20px;">
@@ -162,6 +172,7 @@
   <footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
 
   <script>
+    // تحويل الوقت لتوقيت الرياض
     function toRiyadhTime(date) {
       const utc = date.getTime() + date.getTimezoneOffset() * 60000;
       const riyadhOffset = 3 * 60 * 60000;
@@ -213,59 +224,15 @@
       const minutes = Math.floor((distance%(1000*60*60))/(1000*60));
       const seconds = Math.floor((distance%(1000*60))/1000);
 
-      el.innerHTML = `${days} يوم ${hours} ساعة ${minutes} دقيقة ${seconds} ثانية`;
+      el.textContent = `${days} يوم ${hours} ساعة ${minutes} دقيقة ${seconds} ثانية`;
 
-      const totalDuration = end - start;
-      const elapsed = new Date().getTime() - start;
-      const progress = Math.min(Math.max((elapsed/totalDuration)*100,0),100);
-      progressBar.style.width = progress + "%";
+      if(progressBar){
+        const total = end - start;
+        const passed = getNowRiyadh().getTime() - start;
+        const percent = Math.min(Math.max((passed/total)*100, 0),100);
+        progressBar.style.width = percent+"%";
+      }
     }
-
-    const tips = [
-      "📖 راجع ملخصات الدروس كل يوم",
-      "⏱️ خصص وقتًا للراحة بين المذاكرة",
-      "📝 حل أسئلة سابقة للتدرب",
-      "☕ اشرب الماء وابتعد عن السهر الزائد",
-      "💪 ثق بنفسك، أنت قادر على النجاح!",
-      "😴 احرص على النوم الكافي",
-      "📚 نظم وقتك ولا تؤجل مهامك",
-      "🤝 شارك زملاءك في المراجعة"
-    ];
-
-    let tipIndex = 0;
-    const tipElement = document.getElementById("dailyTip");
-
-    function changeTip() {
-      tipElement.style.opacity = 0;
-      setTimeout(() => {
-        tipElement.textContent = tips[tipIndex];
-        tipElement.style.opacity = 1;
-        tipIndex = (tipIndex+1)%tips.length;
-      }, 600);
-    }
-
-    setInterval(changeTip, 7000);
-    changeTip();
-
-    document.getElementById("themeToggle").addEventListener("click", () => {
-      document.body.classList.toggle("light");
-    });
-
-    const dailyGoal = document.getElementById("dailyGoal");
-    const goalStatus = document.getElementById("goalStatus");
-
-    dailyGoal.addEventListener("input", () => {
-      goalStatus.textContent = dailyGoal.value.trim() ? "✅ هدفك مسجل!" : "✍️ اكتب هدفك لليوم!";
-    });
-
-    const progressInput = document.getElementById("progressInput");
-    const progressText = document.getElementById("progressText");
-    const pointsDisplay = document.getElementById("pointsDisplay");
-
-    progressInput.addEventListener("input", () => {
-      progressText.textContent = `إنجازك: ${progressInput.value}%`;
-      pointsDisplay.textContent = `⭐ نقاط التحفيز: ${Math.floor(progressInput.value/10*5)}`;
-    });
 
     setInterval(() => {
       updateDate();
@@ -273,10 +240,64 @@
       updateCountdown();
     }, 1000);
 
-    updateDate();
-    updateWeekNumber();
-    updateCountdown();
-  </script>
+    // تخزين هدف اليوم
+    const dailyGoal = document.getElementById("dailyGoal");
+    dailyGoal.value = localStorage.getItem("dailyGoal") || "";
 
+    dailyGoal.addEventListener("input", () => {
+      localStorage.setItem("dailyGoal", dailyGoal.value);
+    });
+
+    // المذاكرة ونسبة الإنجاز
+    const progressInput = document.getElementById("progressInput");
+    const progressText = document.getElementById("progressText");
+    progressInput.addEventListener("input", () => {
+      progressText.textContent = `إنجازك: ${progressInput.value}%`;
+      localStorage.setItem("studyProgress", progressInput.value);
+    });
+    progressInput.value = localStorage.getItem("studyProgress") || 0;
+    progressText.textContent = `إنجازك: ${progressInput.value}%`;
+
+    // نقاط التحفيز
+    const pointsDisplay = document.getElementById("pointsDisplay");
+    function updatePoints() {
+      const points = Math.floor(progressInput.value / 10) * 10;
+      pointsDisplay.textContent = `✨ لديك ${points} نقاط تحفيزية`;
+    }
+    progressInput.addEventListener("input", updatePoints);
+    updatePoints();
+
+    // نصائح يومية
+    const tips = [
+      "اقرأ بتركيز 25 دقيقة ثم استرح 5 دقائق.",
+      "ابدأ بالمادة الأصعب أولًا.",
+      "اكتب ملخصًا لما تعلمته اليوم.",
+      "خذ قسطًا من النوم الكافي.",
+      "اشرب ماءً كافيًا وحافظ على صحتك."
+    ];
+    const tipEl = document.getElementById("dailyTip");
+    const savedTip = localStorage.getItem("dailyTip");
+    if(savedTip){
+      tipEl.textContent = savedTip;
+    } else {
+      const tip = tips[Math.floor(Math.random()*tips.length)];
+      tipEl.textContent = tip;
+      localStorage.setItem("dailyTip", tip);
+    }
+
+    // تبديل الوضع الليلي / النهاري
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+      themeToggle.textContent = document.body.classList.contains("light") ? "🌞" : "🌙";
+    });
+
+    // تهيئة عند التحميل
+    window.addEventListener("load", () => {
+      updateDate();
+      updateWeekNumber();
+      updateCountdown();
+    });
+  </script>
 </body>
 </html>
