@@ -1,63 +1,68 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>📚 العد التنازلي للامتحانات</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { scroll-behavior: smooth; }
+
     body {
       font-family: 'Tajawal', 'Noto Color Emoji', sans-serif;
       background: linear-gradient(135deg, #1e2a78, #4a47a3, #c4c1e0);
       background-size: 400% 400%;
       color: #fff;
       text-align: center;
-      padding: 100px 20px 40px;
+      padding: 90px 15px 40px;
       min-height: 100vh;
       overflow-x: hidden;
       animation: gradientShift 12s ease-in-out infinite alternate;
-      position: relative;
       transition: background 0.5s, color 0.5s;
     }
-    @keyframes gradientShift { 0% { background-position: left top; } 100% { background-position: right bottom; } }
+
+    @keyframes gradientShift {
+      0% { background-position: left top; }
+      100% { background-position: right bottom; }
+    }
 
     body.light {
       background: linear-gradient(135deg, #ffeedb, #f8cdda, #c4c1e0);
       color: #333;
     }
-    body.light .countdown { background: rgba(255,255,255,0.6); color: #222; }
+    body.light .countdown { background: rgba(255,255,255,0.7); color: #222; }
     body.light .progress-bar { background: #1e2a78; }
     body.light .tip { color: #1e2a78; }
 
+    /* ✅ الشريط العلوي */
     .top-bar {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      padding: 10px 20px;
+      padding: 10px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
       border-bottom-left-radius: 15px;
       border-bottom-right-radius: 15px;
       z-index: 1000;
-      color: #f8f9fa;
+      font-size: 0.95em;
       font-weight: 600;
-      font-size: 1em;
+      color: #f8f9fa;
     }
 
-    /* ✅ جعل الأسبوع في المنتصف تمامًا */
     .top-bar #weekNumber {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      text-align: center;
+      font-size: 0.95em;
       white-space: nowrap;
     }
 
@@ -65,58 +70,112 @@
       background: none;
       border: none;
       font-size: 1.4em;
-      color: #fff;
+      color: inherit;
       cursor: pointer;
       transition: transform 0.3s ease;
     }
     #themeToggle:hover { transform: scale(1.2); }
 
-    h1 { font-size: 2.6em; margin-bottom: 25px; font-weight: 700; animation: fadeIn 1.5s ease; text-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+    h1 {
+      font-size: 2.2em;
+      margin: 25px 0;
+      font-weight: 700;
+      animation: fadeIn 1.5s ease;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.25);
+      line-height: 1.4;
+    }
 
+    /* ✅ الكروت */
     .countdown {
       display: inline-block;
-      margin: 20px;
-      padding: 30px 25px;
+      margin: 12px auto;
+      padding: 25px 20px;
       border-radius: 20px;
       background: rgba(255,255,255,0.1);
-      width: 280px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-      transition: transform 0.4s ease, background 0.4s ease;
+      width: 95%;
+      max-width: 330px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, background 0.3s ease;
       animation: fadeUp 1.3s ease;
       backdrop-filter: blur(8px);
     }
 
-    .countdown:hover { transform: translateY(-8px) scale(1.05); background: rgba(255,255,255,0.25); }
+    .countdown:hover { transform: translateY(-5px); }
 
-    .countdown h2 { font-size: 1.5em; margin-bottom: 15px; font-weight: 600; color: #ffe66d; }
-    .time { font-size: 1.8em; font-weight: bold; letter-spacing: 1px; animation: pulse 1.5s infinite; }
+    .countdown h2 { font-size: 1.3em; margin-bottom: 12px; font-weight: 600; color: #ffe66d; }
+    .time { font-size: 1.4em; font-weight: bold; letter-spacing: 1px; animation: pulse 1.5s infinite; }
 
-    .progress-container { width: 100%; height: 10px; background: rgba(255,255,255,0.2); border-radius: 5px; margin: 10px 0 0; }
-    .progress-bar { height: 100%; background: #ffe66d; width: 0%; border-radius: 5px; transition: width 0.5s ease; }
+    .progress-container {
+      width: 100%;
+      height: 10px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .progress-bar {
+      height: 100%;
+      background: #ffe66d;
+      width: 0%;
+      border-radius: 5px;
+      transition: width 0.5s ease;
+    }
 
     .tip {
-      margin-top: 40px;
-      font-size: 1.3em;
+      margin-top: 35px;
+      font-size: 1.2em;
       color: #ffd966;
       font-weight: 600;
+      padding: 0 10px;
+      line-height: 1.6;
       transition: opacity 0.6s ease;
     }
 
-    footer { margin-top: 60px; font-size: 1em; color: rgba(255,255,255,0.8); animation: fadeIn 2s ease; }
+    footer {
+      margin-top: 45px;
+      font-size: 0.95em;
+      color: rgba(255,255,255,0.85);
+      animation: fadeIn 2s ease;
+    }
     footer span { color: #ffe66d; font-weight: bold; }
 
-    @keyframes pulse { 0% { opacity:1; } 50% { opacity:0.7; } 100% { opacity:1; } }
-    @keyframes fadeIn { from { opacity:0; transform: translateY(-10px);} to { opacity:1; transform: translateY(0);} }
-    @keyframes fadeUp { from { opacity:0; transform: translateY(20px);} to { opacity:1; transform: translateY(0);} }
+    input[type="text"], input[type="range"] {
+      width: 100%;
+      max-width: 260px;
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      font-size: 1em;
+      outline: none;
+    }
+    input[type="text"]:focus { outline: 2px solid #ffe66d; background: rgba(255,255,255,0.9); }
+
+    /* ✅ أنيميشانات */
+    @keyframes pulse { 0%{opacity:1;} 50%{opacity:0.7;} 100%{opacity:1;} }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(-10px);} to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+
+    /* ✅ تحسين للموبايل */
+    @media (max-width: 768px) {
+      body { padding: 90px 10px 50px; }
+      h1 { font-size: 1.9em; }
+      .countdown h2 { font-size: 1.2em; }
+      .time { font-size: 1.3em; }
+      .tip { font-size: 1.1em; }
+    }
 
     @media (max-width: 480px) {
-      .countdown { width: 90%; padding: 20px 15px; }
-      h1 { font-size: 2em; }
+      h1 { font-size: 1.7em; }
+      .countdown { padding: 20px 15px; }
+      .time { font-size: 1.2em; }
+      .top-bar { flex-direction: column; gap: 4px; padding: 8px; }
+      .top-bar #weekNumber { position: static; transform: none; }
+      #themeToggle { font-size: 1.3em; }
     }
   </style>
 </head>
-<body>
 
+<body>
   <div class="top-bar">
     <div id="currentDate">جارٍ تحميل التاريخ...</div>
     <div id="weekNumber">جارٍ حساب الأسبوع...</div>
@@ -128,32 +187,28 @@
   <div class="countdown">
     <h2>📝 امتحانات منتصف الفصل</h2>
     <div id="midterm" class="time">جارٍ الحساب...</div>
-    <div class="progress-container">
-      <div class="progress-bar" id="midtermProgress"></div>
-    </div>
+    <div class="progress-container"><div class="progress-bar" id="midtermProgress"></div></div>
   </div>
 
   <div class="countdown">
     <h2>🎓 الامتحانات النهائية</h2>
     <div id="finals" class="time">جارٍ الحساب...</div>
-    <div class="progress-container">
-      <div class="progress-bar" id="finalsProgress"></div>
-    </div>
+    <div class="progress-container"><div class="progress-bar" id="finalsProgress"></div></div>
   </div>
 
-  <div class="countdown" style="width:300px; margin-top:20px;">
+  <div class="countdown">
     <h2>🎯 هدف اليوم</h2>
-    <input type="text" id="dailyGoal" placeholder="اكتب هدفك لليوم..." style="width:90%; padding:10px; border:none; border-radius:8px; text-align:center; font-size:1em;">
+    <input type="text" id="dailyGoal" placeholder="اكتب هدفك لليوم..." />
     <p id="goalStatus" style="margin-top:10px; color:#ffe66d; font-weight:600;"></p>
   </div>
 
-  <div class="countdown" style="width:300px; margin-top:20px;">
+  <div class="countdown">
     <h2>📊 نسبة إنجاز المذاكرة</h2>
-    <input type="range" id="progressInput" min="0" max="100" step="1" style="width:90%;">
+    <input type="range" id="progressInput" min="0" max="100" step="1" />
     <p id="progressText">إنجازك: 0%</p>
   </div>
 
-  <div class="countdown" style="width:300px; margin-top:20px;">
+  <div class="countdown">
     <h2>🏆 نقاط التحفيز</h2>
     <p id="pointsDisplay">جارٍ الحساب...</p>
   </div>
@@ -184,8 +239,7 @@
     function updateWeekNumber() {
       const now = getNowRiyadh();
       const diff = now - semesterStart;
-      let weekNumber = Math.ceil(diff / (1000*60*60*24*7));
-      weekNumber += 2;
+      let weekNumber = Math.ceil(diff / (1000*60*60*24*7)) + 2;
       const el = document.getElementById("weekNumber");
       if(weekNumber<1) el.textContent = "⏳ الفصل لم يبدأ بعد";
       else if(weekNumber>16) el.textContent = "🎉 انتهى الفصل الدراسي";
@@ -213,8 +267,7 @@
       const hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
       const minutes = Math.floor((distance%(1000*60*60))/(1000*60));
       const seconds = Math.floor((distance%(1000*60))/1000);
-
-      el.innerHTML = `${days} يوم ${hours} ساعة ${minutes} دقيقة ${seconds} ثانية`;
+      el.innerHTML = `${days}ي ${hours}س ${minutes}د ${seconds}ث`;
 
       const totalDuration = end - start;
       const elapsed = new Date().getTime() - start;
