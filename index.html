@@ -142,7 +142,7 @@
 
   <div class="countdown" style="width:300px; margin-top:20px;">
     <h2>🎯 هدف اليوم</h2>
-    <textarea id="dailyGoal" placeholder="اكتب هدفك لليوم..." rows="4" style="width:100%; padding:15px; font-size:1.2em; border-radius:10px; border:none; resize:none;"></textarea>
+    <textarea id="dailyGoal" placeholder="اكتب هدفك لليوم..." rows="5" style="width:100%; padding:18px; font-size:1.25em; border-radius:12px; border:none; resize:none;"></textarea>
     <p id="goalStatus" style="margin-top:10px; color:#ffe66d; font-weight:600;"></p>
   </div>
 
@@ -245,54 +245,50 @@
     }
 
     const themeButton = document.getElementById("themeToggle");
-    function toggleTheme() {
+    function toggleTheme(){
       document.body.classList.toggle("light");
-      const mode = document.body.classList.contains("light") ? "light" : "dark";
-      themeButton.textContent = mode === "light" ? "☀️" : "🌙";
-      localStorage.setItem("theme", mode);
-    }
-    if (localStorage.getItem("theme") === "light") {
-      document.body.classList.add("light");
-      themeButton.textContent = "☀️";
+      themeButton.textContent = document.body.classList.contains("light") ? "🌙" : "☀️";
     }
     themeButton.addEventListener("click", toggleTheme);
 
-    const goalInput = document.getElementById("dailyGoal");
+    const dailyGoalInput = document.getElementById("dailyGoal");
     const goalStatus = document.getElementById("goalStatus");
-    goalInput.value = localStorage.getItem("goal") || "";
-    goalStatus.textContent = goalInput.value ? `🎓 هدفك: ${goalInput.value}` : "✍️ اكتب هدفك لليوم!";
-    goalInput.addEventListener("change", () => {
-      localStorage.setItem("goal", goalInput.value);
-      goalStatus.textContent = goalInput.value ? `🎓 هدفك: ${goalInput.value}` : "✍️ اكتب هدفك لليوم!";
+    dailyGoalInput.addEventListener("keypress", (e)=>{
+      if(e.key === "Enter") {
+        e.preventDefault();
+        const goal = dailyGoalInput.value.trim();
+        if(goal.length>0){
+          goalStatus.textContent = `🎯 هدف اليوم: ${goal}`;
+          dailyGoalInput.value="";
+        }
+      }
     });
 
     const progressInput = document.getElementById("progressInput");
     const progressText = document.getElementById("progressText");
-    progressInput.value = localStorage.getItem("progress") || 0;
-    progressText.textContent = `إنجازك: ${progressInput.value}%`;
-    progressInput.addEventListener("input", () => {
-      localStorage.setItem("progress", progressInput.value);
+    progressInput.addEventListener("input", ()=>{
       progressText.textContent = `إنجازك: ${progressInput.value}%`;
     });
 
-    function updatePoints() {
-      const pointsDisplay = document.getElementById("pointsDisplay");
-      const goal = localStorage.getItem("goal") ? 1 : 0;
-      const progress = Number(localStorage.getItem("progress") || 0);
-      const points = Math.floor(goal*50 + progress*0.5);
-      pointsDisplay.textContent = `⭐ لديك ${points} نقاط تحفيزية`;
+    const pointsDisplay = document.getElementById("pointsDisplay");
+    function updatePoints(){
+      const progress = parseInt(progressInput.value);
+      pointsDisplay.textContent = `⭐ نقاط التحفيز: ${progress} نقطة`;
     }
+    progressInput.addEventListener("input", updatePoints);
 
-    function updateAll() {
-      updateDate();
-      updateWeekNumber();
-      updateCountdown();
-      updatePoints();
-    }
+    setInterval(updateCountdown, 1000);
+    setInterval(updateDate, 1000);
+    setInterval(updateWeekNumber, 1000);
+    setInterval(changeTip, 12000);
 
-    updateAll();
-    setInterval(updateAll, 1000);
-    setInterval(changeTip, 7000);
+    // initial load
+    updateCountdown();
+    updateDate();
+    updateWeekNumber();
+    changeTip();
+    updatePoints();
+
   </script>
 </body>
 </html>
