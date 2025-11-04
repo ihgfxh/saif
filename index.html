@@ -10,59 +10,45 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { scroll-behavior: smooth; }
-
     body {
       font-family: 'Tajawal', 'Noto Color Emoji', sans-serif;
-      background: linear-gradient(135deg, #1e2a78, #4a47a3, #c4c1e0);
-      background-size: 400% 400%;
+      background: linear-gradient(135deg, #1e2a78, #4a47a3);
       color: #fff;
       text-align: center;
       padding: 90px 15px 40px;
       min-height: 100vh;
       overflow-x: hidden;
-      animation: gradientShift 12s ease-in-out infinite alternate;
-      transition: background 0.5s, color 0.5s;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: left top; }
-      100% { background-position: right bottom; }
+      transition: background 0.6s ease, color 0.6s ease;
     }
 
     body.light {
-      background: linear-gradient(135deg, #ffeedb, #f8cdda, #c4c1e0);
-      color: #333;
+      background: linear-gradient(135deg, #fff8ee, #e9dcff);
+      color: #222;
     }
-    body.light .countdown { background: rgba(255,255,255,0.7); color: #222; }
-    body.light .progress-bar { background: #1e2a78; }
-    body.light .tip { color: #1e2a78; }
 
-    /* ✅ الشريط العلوي */
+    /* الشريط العلوي */
     .top-bar {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 10px 16px;
+      top: 0; left: 0; width: 100%;
+      padding: 10px 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-      border-bottom-left-radius: 15px;
-      border-bottom-right-radius: 15px;
+      background: rgba(255,255,255,0.12);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
       z-index: 1000;
-      font-size: 0.95em;
-      font-weight: 600;
       color: #f8f9fa;
+      font-weight: 600;
+      font-size: 0.95em;
     }
 
     .top-bar #weekNumber {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 0.95em;
+      font-size: 0.9em;
       white-space: nowrap;
     }
 
@@ -72,105 +58,63 @@
       font-size: 1.4em;
       color: inherit;
       cursor: pointer;
-      transition: transform 0.3s ease;
     }
-    #themeToggle:hover { transform: scale(1.2); }
 
     h1 {
-      font-size: 2.2em;
+      font-size: 2em;
       margin: 25px 0;
       font-weight: 700;
-      animation: fadeIn 1.5s ease;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.25);
-      line-height: 1.4;
     }
 
-    /* ✅ الكروت */
+    /* الكروت */
     .countdown {
-      display: inline-block;
-      margin: 12px auto;
-      padding: 25px 20px;
-      border-radius: 20px;
       background: rgba(255,255,255,0.1);
+      border-radius: 16px;
+      margin: 12px auto;
+      padding: 20px;
       width: 95%;
-      max-width: 330px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease, background 0.3s ease;
-      animation: fadeUp 1.3s ease;
-      backdrop-filter: blur(8px);
+      max-width: 320px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
     }
 
-    .countdown:hover { transform: translateY(-5px); }
+    .countdown:hover { transform: translateY(-3px); }
+    .countdown h2 { font-size: 1.3em; color: #ffe66d; margin-bottom: 8px; }
+    .time { font-size: 1.3em; font-weight: bold; }
 
-    .countdown h2 { font-size: 1.3em; margin-bottom: 12px; font-weight: 600; color: #ffe66d; }
-    .time { font-size: 1.4em; font-weight: bold; letter-spacing: 1px; animation: pulse 1.5s infinite; }
-
-    .progress-container {
-      width: 100%;
-      height: 10px;
-      background: rgba(255,255,255,0.25);
-      border-radius: 5px;
-      margin-top: 10px;
-    }
-    .progress-bar {
-      height: 100%;
-      background: #ffe66d;
-      width: 0%;
-      border-radius: 5px;
-      transition: width 0.5s ease;
-    }
-
-    .tip {
-      margin-top: 35px;
-      font-size: 1.2em;
-      color: #ffd966;
-      font-weight: 600;
-      padding: 0 10px;
-      line-height: 1.6;
-      transition: opacity 0.6s ease;
-    }
-
-    footer {
-      margin-top: 45px;
-      font-size: 0.95em;
-      color: rgba(255,255,255,0.85);
-      animation: fadeIn 2s ease;
-    }
-    footer span { color: #ffe66d; font-weight: bold; }
+    .progress-container { width: 100%; height: 8px; background: rgba(255,255,255,0.25); border-radius: 5px; margin-top: 8px; }
+    .progress-bar { height: 100%; background: #ffe66d; width: 0%; border-radius: 5px; transition: width 0.4s ease; }
 
     input[type="text"], input[type="range"] {
       width: 100%;
-      max-width: 260px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 10px;
       text-align: center;
       font-size: 1em;
       outline: none;
+      margin-top: 5px;
     }
-    input[type="text"]:focus { outline: 2px solid #ffe66d; background: rgba(255,255,255,0.9); }
 
-    /* ✅ أنيميشانات */
-    @keyframes pulse { 0%{opacity:1;} 50%{opacity:0.7;} 100%{opacity:1;} }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(-10px);} to{opacity:1;transform:translateY(0);} }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
-
-    /* ✅ تحسين للموبايل */
-    @media (max-width: 768px) {
-      body { padding: 90px 10px 50px; }
-      h1 { font-size: 1.9em; }
-      .countdown h2 { font-size: 1.2em; }
-      .time { font-size: 1.3em; }
-      .tip { font-size: 1.1em; }
+    .tip {
+      margin-top: 30px;
+      font-size: 1.1em;
+      color: #ffd966;
+      font-weight: 600;
+      line-height: 1.6;
     }
+
+    footer { margin-top: 40px; font-size: 0.95em; color: rgba(255,255,255,0.8); }
+    footer span { color: #ffe66d; font-weight: bold; }
+
+    body.light .countdown { background: rgba(255,255,255,0.75); color: #222; }
+    body.light .progress-bar { background: #1e2a78; }
+    body.light .tip { color: #1e2a78; }
 
     @media (max-width: 480px) {
-      h1 { font-size: 1.7em; }
-      .countdown { padding: 20px 15px; }
-      .time { font-size: 1.2em; }
-      .top-bar { flex-direction: column; gap: 4px; padding: 8px; }
+      .top-bar { flex-direction: column; gap: 5px; padding: 8px; }
       .top-bar #weekNumber { position: static; transform: none; }
-      #themeToggle { font-size: 1.3em; }
+      h1 { font-size: 1.6em; }
     }
   </style>
 </head>
@@ -199,7 +143,7 @@
   <div class="countdown">
     <h2>🎯 هدف اليوم</h2>
     <input type="text" id="dailyGoal" placeholder="اكتب هدفك لليوم..." />
-    <p id="goalStatus" style="margin-top:10px; color:#ffe66d; font-weight:600;"></p>
+    <p id="goalStatus" style="margin-top:8px; color:#ffe66d; font-weight:600;"></p>
   </div>
 
   <div class="countdown">
@@ -213,67 +157,19 @@
     <p id="pointsDisplay">جارٍ الحساب...</p>
   </div>
 
-  <div class="tip" id="dailyTip">جارٍ تحميل النصيحة...</div>
+  <div class="tip" id="dailyTip">📖 راجع ملخصات الدروس كل يوم</div>
 
   <footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
 
   <script>
     function toRiyadhTime(date) {
       const utc = date.getTime() + date.getTimezoneOffset() * 60000;
-      const riyadhOffset = 3 * 60 * 60000;
-      return new Date(utc + riyadhOffset);
+      return new Date(utc + 3 * 60 * 60000);
     }
 
-    const semesterStart = new Date(Date.UTC(2025, 8, 7, 0, 0, 0));
-    const midtermDate = new Date(Date.UTC(2025, 11, 4, 9, 0, 0));
-    const finalsDate = new Date(Date.UTC(2026, 0, 4, 9, 0, 0));
-
-    function getNowRiyadh() { return toRiyadhTime(new Date()); }
-
-    function updateDate() {
-      const now = getNowRiyadh();
-      const options = { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'Asia/Riyadh' };
-      document.getElementById("currentDate").textContent = now.toLocaleDateString('ar-EG', options);
-    }
-
-    function updateWeekNumber() {
-      const now = getNowRiyadh();
-      const diff = now - semesterStart;
-      let weekNumber = Math.ceil(diff / (1000*60*60*24*7)) + 2;
-      const el = document.getElementById("weekNumber");
-      if(weekNumber<1) el.textContent = "⏳ الفصل لم يبدأ بعد";
-      else if(weekNumber>16) el.textContent = "🎉 انتهى الفصل الدراسي";
-      else el.textContent = `📅 الأسبوع ${weekNumber}`;
-    }
-
-    function updateCountdown() {
-      const now = getNowRiyadh().getTime();
-      updateTimer("midterm", midtermDate - now, "🎯 بدأت امتحانات منتصف الفصل!", semesterStart.getTime(), midtermDate.getTime(), "midtermProgress");
-      updateTimer("finals", finalsDate - now, "🏁 بدأت الامتحانات النهائية!", midtermDate.getTime(), finalsDate.getTime(), "finalsProgress");
-    }
-
-    function updateTimer(elementId, distance, message, start, end, progressId) {
-      const el = document.getElementById(elementId);
-      const progressBar = document.getElementById(progressId);
-
-      if(distance < 0){
-        el.innerHTML = message;
-        el.style.color = "#ffe66d";
-        progressBar.style.width = "100%";
-        return;
-      }
-
-      const days = Math.floor(distance/(1000*60*60*24));
-      const hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-      const minutes = Math.floor((distance%(1000*60*60))/(1000*60));
-      const seconds = Math.floor((distance%(1000*60))/1000);
-      el.innerHTML = `${days}ي ${hours}س ${minutes}د ${seconds}ث`;
-
-      const totalDuration = end - start;
-      const elapsed = new Date().getTime() - start;
-      const progress = Math.min(Math.max((elapsed/totalDuration)*100,0),100);
-      progressBar.style.width = progress + "%";
-    }
+    const semesterStart = new Date(Date.UTC(2025, 8, 7));
+    const midtermDate = new Date(Date.UTC(2025, 11, 4, 9));
+    const finalsDate = new Date(Date.UTC(2026, 0, 4, 9));
 
     const tips = [
       "📖 راجع ملخصات الدروس كل يوم",
@@ -286,35 +182,30 @@
       "🤝 شارك زملاءك في المراجعة"
     ];
 
-    let tipIndex = 0;
     const tipElement = document.getElementById("dailyTip");
-
-    function changeTip() {
-      tipElement.style.opacity = 0;
-      setTimeout(() => {
-        tipIndex = (tipIndex + 1) % tips.length;
-        tipElement.textContent = tips[tipIndex];
-        tipElement.style.opacity = 1;
-      }, 600);
-    }
+    let tipIndex = 0;
+    setInterval(() => {
+      tipIndex = (tipIndex + 1) % tips.length;
+      tipElement.textContent = tips[tipIndex];
+    }, 10000);
 
     const themeButton = document.getElementById("themeToggle");
-    function toggleTheme() {
+    themeButton.addEventListener("click", () => {
       document.body.classList.toggle("light");
       const mode = document.body.classList.contains("light") ? "light" : "dark";
       themeButton.textContent = mode === "light" ? "☀️" : "🌙";
       localStorage.setItem("theme", mode);
-    }
+    });
+
     if (localStorage.getItem("theme") === "light") {
       document.body.classList.add("light");
       themeButton.textContent = "☀️";
     }
-    themeButton.addEventListener("click", toggleTheme);
 
     const goalInput = document.getElementById("dailyGoal");
     const goalStatus = document.getElementById("goalStatus");
     goalInput.value = localStorage.getItem("goal") || "";
-    goalStatus.textContent = goalInput.value ? `🎓 هدفك: ${goalInput.value}` : "✍️ اكتب هدفك لليوم!";
+    goalStatus.textContent = goalInput.value ? `🎯 هدفك: ${goalInput.value}` : "✍️ اكتب هدفك لليوم!";
     goalInput.addEventListener("change", () => {
       localStorage.setItem("goal", goalInput.value);
       goalStatus.textContent = `🎯 هدفك: ${goalInput.value}`;
@@ -329,27 +220,52 @@
       localStorage.setItem("studyProgress", progressInput.value);
     });
 
+    // ✅ نقاط التحفيز
     const pointsDisplay = document.getElementById("pointsDisplay");
-    const lastVisit = localStorage.getItem("lastVisit");
-    let points = parseInt(localStorage.getItem("motivationPoints") || "0");
     const today = new Date().toDateString();
-    if (lastVisit !== today) {
-      points += 1;
+    let points = parseInt(localStorage.getItem("motivationPoints") || "0");
+    if (localStorage.getItem("lastVisit") !== today) {
+      points++;
       localStorage.setItem("lastVisit", today);
       localStorage.setItem("motivationPoints", points);
     }
     pointsDisplay.textContent = `⭐ عدد الأيام التي زرت فيها الصفحة: ${points}`;
 
-    function updateAll() {
-      updateDate();
-      updateWeekNumber();
-      updateCountdown();
-    }
-    setInterval(updateAll, 1000);
-    updateAll();
+    function updateUI() {
+      const now = toRiyadhTime(new Date());
+      const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+      document.getElementById("currentDate").textContent = now.toLocaleDateString('ar-EG', options);
 
-    tipElement.textContent = tips[tipIndex];
-    setInterval(changeTip, 5000);
+      const diff = now - semesterStart;
+      let weekNumber = Math.ceil(diff / (1000*60*60*24*7)) + 2;
+      const weekText = weekNumber < 1 ? "⏳ الفصل لم يبدأ بعد" :
+                       weekNumber > 16 ? "🎉 انتهى الفصل الدراسي" :
+                       `📅 الأسبوع ${weekNumber}`;
+      document.getElementById("weekNumber").textContent = weekText;
+
+      const updateTimer = (id, distance, msg, start, end, barId) => {
+        const el = document.getElementById(id);
+        const bar = document.getElementById(barId);
+        if (distance < 0) {
+          el.textContent = msg;
+          bar.style.width = "100%";
+          return;
+        }
+        const days = Math.floor(distance / 86400000);
+        const hours = Math.floor((distance % 86400000) / 3600000);
+        const mins = Math.floor((distance % 3600000) / 60000);
+        el.textContent = `${days}ي ${hours}س ${mins}د`;
+
+        const progress = Math.min(Math.max((now - start) / (end - start) * 100, 0), 100);
+        bar.style.width = progress + "%";
+      };
+
+      updateTimer("midterm", midtermDate - now, "🎯 بدأت امتحانات منتصف الفصل!", semesterStart, midtermDate, "midtermProgress");
+      updateTimer("finals", finalsDate - now, "🏁 بدأت الامتحانات النهائية!", midtermDate, finalsDate, "finalsProgress");
+    }
+
+    updateUI();
+    setInterval(updateUI, 10000);
   </script>
 </body>
 </html>
