@@ -110,6 +110,15 @@
       #mobileVersion h2{margin-bottom:20px;}
       #mobileVersion .card{width:90%;margin:15px auto;}
     }
+
+    /* ✅ خلفية ثابتة لنسخة الهاتف بلون أزرق فاتح */
+    @media(max-width:768px){
+      body {
+        background: #a7c7f9 !important; /* أزرق فاتح مريح للعين */
+        animation: none !important;     /* إيقاف حركة الخلفية */
+        background-size: cover !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -158,7 +167,7 @@
   <footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
 </div>
 
-<!-- نسخة الهاتف المحسنة -->
+<!-- نسخة الهاتف -->
 <div id="mobileVersion">
   <div style="padding:60px 15px;text-align:center;">
     <h1>📚 العد التنازلي للامتحانات</h1>
