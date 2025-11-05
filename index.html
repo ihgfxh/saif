@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -111,12 +112,19 @@
       #mobileVersion .card{width:90%;margin:15px auto;}
     }
 
-    /* ✅ خلفية ثابتة لنسخة الهاتف بلون أزرق فاتح */
+    /* ✅ تحسين أداء نسخة الجوال */
     @media(max-width:768px){
       body {
-        background: #a7c7f9 !important; /* أزرق فاتح مريح للعين */
-        animation: none !important;     /* إيقاف حركة الخلفية */
-        background-size: cover !important;
+        background: #a7c7f9 !important; /* أزرق فاتح ثابت */
+        animation: none !important;
+      }
+      .card {
+        backdrop-filter: none !important;
+        background: rgba(255,255,255,0.3) !important;
+      }
+      * {
+        transition: none !important;
+        animation: none !important;
       }
     }
   </style>
@@ -277,7 +285,7 @@ if(isMobile){
   };
 
   const tips=["📖 راجع ملخصات الدروس","⏱️ خصص وقتًا للراحة","📝 حل أسئلة سابقة","☕ لا تسهر كثيرًا","💪 ثق بنفسك!","😴 نم كفاية","📚 نظم وقتك","🤝 ذاكر مع أصدقائك"];
-  let t=0;setInterval(()=>{const el=document.getElementById("dailyTipMobile");el.style.opacity=0;setTimeout(()=>{t=(t+1)%tips.length;el.textContent=tips[t];el.style.opacity=1;},500);},6000);
+  let t=0;setInterval(()=>{const el=document.getElementById("dailyTipMobile");el.style.opacity=0;setTimeout(()=>{t=(t+1)%tips.length;el.textContent=tips[t];el.style.opacity=1;},500);},20000);
 
   const goal=document.getElementById("dailyGoalMobile"),gs=document.getElementById("goalStatusMobile");
   goal.value=localStorage.getItem("goalMobile")||"";gs.textContent=goal.value?`🎯 هدفك: ${goal.value}`:"✍️ اكتب هدفك لليوم!";
@@ -291,7 +299,7 @@ if(isMobile){
   if(localStorage.getItem("lastVisitMobile")!==today){pts++;localStorage.setItem("motivationPointsMobile",pts);localStorage.setItem("lastVisitMobile",today);}
   pd.textContent=`⭐ عدد زياراتك: ${pts}`;
 
-  setInterval(updateCountdownMobile,1000);
+  setInterval(updateCountdownMobile,60000); // تحديث كل دقيقة
   updateCountdownMobile();
 }
 </script>
