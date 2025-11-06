@@ -16,7 +16,6 @@
       color:#fff;
       min-height:100vh;
       overflow-x:hidden;
-      transition:background 0.5s,color 0.5s;
       animation:gradientMove 20s ease-in-out infinite alternate;
     }
     @keyframes gradientMove {
@@ -48,7 +47,6 @@
       margin-bottom:30px;
       font-weight:700;
       text-shadow:0 3px 10px rgba(0,0,0,0.3);
-      animation:fadeIn 1.2s ease;
     }
 
     .grid {
@@ -96,7 +94,6 @@
       transition:opacity 0.6s;
     }
 
-    @keyframes fadeIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
     body.light{background:linear-gradient(135deg,#f8e9dd,#f3d1f4,#d7d2f5);color:#333;}
     body.light .card{background:rgba(255,255,255,0.7);color:#222;}
     body.light .progress-bar{background:#4a47a3;}
@@ -104,33 +101,55 @@
     body.light #themeToggle{color:#333;}
     body.light .top-bar{background:rgba(255,255,255,0.3);}
 
+    /* ✅ صف خاص للنقاط والطموح في نسخة الكمبيوتر */
+    .bottom-row {
+      display: flex;
+      width: 90%;
+      margin: 25px auto 0 auto;
+      gap: 25px;
+    }
+    .bottom-row .card {
+      flex: 1;
+      margin: 0;
+    }
+
     #mobileVersion{display:none;}
     @media(max-width:768px){
       #pcVersion{display:none;}
       #mobileVersion{display:block;}
-      #mobileVersion h2{margin-bottom:20px;}
-      #mobileVersion .card{width:90%;margin:15px auto;}
+      .bottom-row{flex-direction:column;gap:20px;}
     }
 
-    /* ✅ تحسين أداء نسخة الجوال */
+    /* ✅ تحسين أداء الجوال */
     @media(max-width:768px){
       body {
-        background: #a7c7f9 !important; /* أزرق فاتح ثابت */
+        background: linear-gradient(135deg,#4a47a3,#6f63c8,#a7c7f9);
+        background-size: cover;
         animation: none !important;
+        backdrop-filter: none !important;
       }
       .card {
         backdrop-filter: none !important;
-        background: rgba(255,255,255,0.3) !important;
+        background: rgba(255,255,255,0.25) !important;
+        box-shadow: none !important;
       }
       * {
         transition: none !important;
         animation: none !important;
+      }
+      .tip, .time {
+        animation: none !important;
+        transition: none !important;
+      }
+      .grid, .bottom-row {
+        will-change: unset !important;
       }
     }
   </style>
 </head>
 <body>
 
+<!-- 💻 نسخة الكمبيوتر -->
 <div id="pcVersion">
   <div class="top-bar">
     <div id="currentDate">جارٍ تحميل التاريخ...</div>
@@ -164,10 +183,18 @@
       <input type="range" id="progressInput" min="0" max="100" step="1">
       <p id="progressText">إنجازك: 0%</p>
     </div>
+  </div>
 
+  <!-- ✅ الصف السفلي للنقاط والطموح -->
+  <div class="bottom-row">
     <div class="card">
       <h2>🏆 نقاط التحفيز</h2>
       <p id="pointsDisplay">جارٍ الحساب...</p>
+    </div>
+    <div class="card">
+      <h2>🌟 طموحك</h2>
+      <input type="text" id="ambitionInput" placeholder="اكتب طموحك هنا...">
+      <p id="ambitionStatus" style="margin-top:10px;color:#ffe66d;font-weight:600;"></p>
     </div>
   </div>
 
@@ -175,7 +202,7 @@
   <footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
 </div>
 
-<!-- نسخة الهاتف -->
+<!-- 📱 نسخة الجوال -->
 <div id="mobileVersion">
   <div style="padding:60px 15px;text-align:center;">
     <h1>📚 العد التنازلي للامتحانات</h1>
@@ -208,6 +235,12 @@
         <h2>🏆 نقاط التحفيز</h2>
         <p id="pointsDisplayMobile">جارٍ الحساب...</p>
       </div>
+
+      <div class="card">
+        <h2>🌟 طموحك</h2>
+        <input type="text" id="ambitionInputMobile" placeholder="اكتب طموحك هنا...">
+        <p id="ambitionStatusMobile" style="margin-top:10px;color:#ffe66d;font-weight:600;"></p>
+      </div>
     </div>
 
     <div class="tip" id="dailyTipMobile">جارٍ تحميل النصيحة...</div>
@@ -220,12 +253,10 @@ const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 document.getElementById("pcVersion").style.display = isMobile ? "none" : "block";
 document.getElementById("mobileVersion").style.display = isMobile ? "block" : "none";
 
-/* دوال تحويل الوقت */
 function toRiyadhTime(date){const utc=date.getTime()+date.getTimezoneOffset()*60000;return new Date(utc+3*60*60000);}
 const semesterStart=new Date(Date.UTC(2025,8,7)),midtermDate=new Date(Date.UTC(2025,11,4,9)),finalsDate=new Date(Date.UTC(2026,0,4,9));
 const getNow=()=>toRiyadhTime(new Date());
 
-/* دوال الكمبيوتر */
 if(!isMobile){
   const updateDate=()=>{const n=getNow();document.getElementById("currentDate").textContent=n.toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
   const updateWeek=()=>{const n=getNow(),diff=n-semesterStart,w=Math.ceil(diff/(1000*60*60*24*7))+2,el=document.getElementById("weekNumber");
@@ -245,7 +276,7 @@ if(!isMobile){
   };
 
   const tips=["📖 راجع ملخصات الدروس","⏱️ خصص وقتًا للراحة","📝 حل أسئلة سابقة","☕ لا تسهر كثيرًا","💪 ثق بنفسك!","😴 نم كفاية","📚 نظم وقتك","🤝 ذاكر مع أصدقائك"];
-  let t=0;setInterval(()=>{const el=document.getElementById("dailyTip");el.style.opacity=0;setTimeout(()=>{t=(t+1)%tips.length;el.textContent=tips[t];el.style.opacity=1;},500);},6000);
+  let t=0;setInterval(()=>{const el=document.getElementById("dailyTip");el.style.opacity=0;setTimeout(()=>{t=(t+1)%tips.length;el.textContent=tips[t];el.style.opacity=1;},500);},8000);
 
   const theme=document.getElementById("themeToggle");
   const setTheme=(m)=>{document.body.classList.toggle("light",m==="light");theme.textContent=m==="light"?"☀️":"🌙";localStorage.setItem("theme",m);}
@@ -264,11 +295,15 @@ if(!isMobile){
   if(localStorage.getItem("lastVisit")!==today){pts++;localStorage.setItem("motivationPoints",pts);localStorage.setItem("lastVisit",today);}
   pd.textContent=`⭐ عدد زياراتك: ${pts}`;
 
+  // 🌟 طموحك
+  const amb=document.getElementById("ambitionInput"),as=document.getElementById("ambitionStatus");
+  amb.value=localStorage.getItem("ambition")||"";as.textContent=amb.value?`🌟 طموحك: ${amb.value}`:"💭 اكتب طموحك الذي تسعى له!";
+  amb.onchange=()=>{localStorage.setItem("ambition",amb.value);as.textContent=`🌟 طموحك: ${amb.value}`;};
+
   const updateAll=()=>{updateDate();updateWeek();updateCountdown();}
   setInterval(updateAll,1000);updateAll();
 }
 
-/* دوال الهاتف */
 if(isMobile){
   const updateTimerMobile=(id,dist,msg,start,end,progId)=>{
     const el=document.getElementById(id),prog=document.getElementById(progId);
@@ -284,8 +319,12 @@ if(isMobile){
     updateTimerMobile("finalsMobile",finalsDate-now,"🏁 بدأت الامتحانات النهائية!",midtermDate.getTime(),finalsDate.getTime(),"finalsProgressMobile");
   };
 
-  const tips=["📖 راجع ملخصات الدروس","⏱️ خصص وقتًا للراحة","📝 حل أسئلة سابقة","☕ لا تسهر كثيرًا","💪 ثق بنفسك!","😴 نم كفاية","📚 نظم وقتك","🤝 ذاكر مع أصدقائك"];
-  let t=0;setInterval(()=>{const el=document.getElementById("dailyTipMobile");el.style.opacity=0;setTimeout(()=>{t=(t+1)%tips.length;el.textContent=tips[t];el.style.opacity=1;},500);},20000);
+  const tips=["📖 راجع ملخصاتك","☕ لا تسهر كثيرًا","💪 ثق بنفسك!","📝 تدرب على الاختبارات السابقة","😴 نم جيدًا"];
+  clearInterval(window.tipInterval);
+  window.tipInterval=setInterval(()=>{
+    const i=Math.floor(Math.random()*tips.length);
+    document.getElementById("dailyTipMobile").textContent=tips[i];
+  },12000);
 
   const goal=document.getElementById("dailyGoalMobile"),gs=document.getElementById("goalStatusMobile");
   goal.value=localStorage.getItem("goalMobile")||"";gs.textContent=goal.value?`🎯 هدفك: ${goal.value}`:"✍️ اكتب هدفك لليوم!";
@@ -299,7 +338,11 @@ if(isMobile){
   if(localStorage.getItem("lastVisitMobile")!==today){pts++;localStorage.setItem("motivationPointsMobile",pts);localStorage.setItem("lastVisitMobile",today);}
   pd.textContent=`⭐ عدد زياراتك: ${pts}`;
 
-  setInterval(updateCountdownMobile,60000); // تحديث كل دقيقة
+  const amb=document.getElementById("ambitionInputMobile"),as=document.getElementById("ambitionStatusMobile");
+  amb.value=localStorage.getItem("ambitionMobile")||"";as.textContent=amb.value?`🌟 طموحك: ${amb.value}`:"💭 اكتب طموحك الذي تسعى له!";
+  amb.onchange=()=>{localStorage.setItem("ambitionMobile",amb.value);as.textContent=`🌟 طموحك: ${amb.value}`;};
+
+  setInterval(updateCountdownMobile,60000);
   updateCountdownMobile();
 }
 </script>
