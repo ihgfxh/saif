@@ -34,7 +34,24 @@
     #themeToggle:hover{transform:scale(1.15);}
     h1 {font-size:2.8em;text-align:center;margin-top:90px;margin-bottom:30px;font-weight:700;text-shadow:0 3px 10px rgba(0,0,0,0.3);}
 
-    .grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:25px;width:90%;margin:0 auto;justify-items:center;}
+    /* ✅ تعديل ترتيب بطاقات العد التنازلي لتكون في صف واحد */
+    .grid {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      flex-wrap: nowrap;
+      gap: 25px;
+      width: 95%;
+      margin: 0 auto;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+    }
+    .grid .card {
+      flex: 0 0 300px;
+      min-width: 280px;
+      max-width: 320px;
+    }
+
     .card {
       background:rgba(255,255,255,0.1);
       border-radius:18px;padding:25px 20px;width:100%;
@@ -105,7 +122,13 @@
     }
 
     #mobileVersion{display:none;}
+
+    /* ✅ في الجوال ترجع البطاقات بشكل عمودي */
     @media(max-width:768px){
+      .grid {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
       #pcVersion{display:none;}
       #mobileVersion{display:block;}
       .bottom-row{grid-template-columns:1fr;}
