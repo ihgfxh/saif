@@ -34,24 +34,7 @@
     #themeToggle:hover{transform:scale(1.15);}
     h1 {font-size:2.8em;text-align:center;margin-top:90px;margin-bottom:30px;font-weight:700;text-shadow:0 3px 10px rgba(0,0,0,0.3);}
 
-    /* ✅ تعديل هنا فقط: جعل بطاقات العد التنازلي في صف واحد */
-    .grid {
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      flex-wrap: nowrap;
-      gap: 25px;
-      width: 95%;
-      margin: 0 auto;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-    }
-    .grid .card {
-      flex: 0 0 300px;
-      min-width: 280px;
-      max-width: 320px;
-    }
-
+    .grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:25px;width:90%;margin:0 auto;justify-items:center;}
     .card {
       background:rgba(255,255,255,0.1);
       border-radius:18px;padding:25px 20px;width:100%;
@@ -126,7 +109,6 @@
       #pcVersion{display:none;}
       #mobileVersion{display:block;}
       .bottom-row{grid-template-columns:1fr;}
-      .grid {flex-wrap: wrap; justify-content: center;} /* الجوال صفوف */
     }
 
     @media(max-width:768px){
@@ -230,8 +212,49 @@ if(!isMobile){
   const updateAll=()=>{updateDate();updateWeek();updateCountdown();};setInterval(updateAll,1000);updateAll();
 }
 
-/* 📱 نسخة الجوال */
-if(isMobile){/* ... نفس كود الجوال الأصلي بالكامل (تم الاحتفاظ به) ... */}
+/* 📱 نسخة الجوال — إصلاح كامل */
+if(isMobile){
+  const updateTimerMobile=(id,dist,msg,start,end,progId)=>{
+    const el=document.getElementById(id),prog=document.getElementById(progId);
+    if(!el||!prog)return;
+    if(dist<0){el.textContent=msg;prog.style.width="100%";return;}
+    const d=Math.floor(dist/(1000*60*60*24));el.innerHTML=`${d} أيام`;
+    const total=end-start,elapsed=new Date().getTime()-start,progress=Math.min(Math.max((elapsed/total)*100,0),100);
+    prog.style.width=progress+"%";
+  };
+
+  const updateCountdownMobile=()=>{
+    const now=getNow().getTime();
+    updateTimerMobile("midtermMobile",midtermDate-now,"🎯 بدأت امتحانات منتصف الفصل!",semesterStart.getTime(),midtermDate.getTime(),"midtermProgressMobile");
+    updateTimerMobile("finalsMobile",finalsDate-now,"🏁 بدأت الامتحانات النهائية!",midtermDate.getTime(),finalsDate.getTime(),"finalsProgressMobile");
+    updateTimerMobile("early1Mobile",early1Date-now,"📘 بدأت الفترة الأولى!",semesterStart.getTime(),early1Date.getTime(),"early1ProgressMobile");
+    updateTimerMobile("early2Mobile",early2Date-now,"📗 بدأت الفترة الثانية!",early1Date.getTime(),early2Date.getTime(),"early2ProgressMobile");
+  };
+
+  const tips=["📖 راجع ملخصات الدروس","⏱️ خصص وقتًا للراحة","📝 حل أسئلة سابقة","☕ لا تسهر كثيرًا","💪 ثق بنفسك!","😴 نم كفاية","📚 نظم وقتك","🤝 ذاكر مع أصدقائك"];
+  let t=0;setInterval(()=>{const el=document.getElementById("dailyTipMobile");el.style.opacity=0;setTimeout(()=>{t=(t+1)%tips.length;el.textContent=tips[t];el.style.opacity=1;},500);},8000);
+
+  const goalM=document.getElementById("dailyGoalMobile"),gsM=document.getElementById("goalStatusMobile");
+  goalM.value=localStorage.getItem("goal")||"";gsM.textContent=goalM.value?`🎯 هدفك: ${goalM.value}`:"✍️ اكتب هدفك لليوم!";
+  goalM.onchange=()=>{localStorage.setItem("goal",goalM.value);gsM.textContent=`🎯 هدفك: ${goalM.value}`;};
+
+  const prM=document.getElementById("progressInputMobile"),ptM=document.getElementById("progressTextMobile");
+  prM.value=localStorage.getItem("studyProgress")||0;ptM.textContent=`إنجازك: ${prM.value}%`;
+  prM.oninput=()=>{ptM.textContent=`إنجازك: ${prM.value}%`;localStorage.setItem("studyProgress",prM.value);};
+
+  const pdM=document.getElementById("pointsDisplayMobile");
+  let ptsM=parseInt(localStorage.getItem("motivationPoints")||"0");const todayM=new Date().toDateString();
+  if(localStorage.getItem("lastVisit")!==todayM){ptsM++;localStorage.setItem("motivationPoints",ptsM);localStorage.setItem("lastVisit",todayM);}
+  pdM.textContent=`⭐ عدد زياراتك: ${ptsM}`;
+
+  const ambM=document.getElementById("ambitionInputMobile"),asM=document.getElementById("ambitionStatusMobile");
+  ambM.value=localStorage.getItem("ambition")||"";asM.textContent=ambM.value?`🌟 طموحك: ${ambM.value}`:"💭 اكتب طموحك الذي تسعى له!";
+  ambM.onchange=()=>{localStorage.setItem("ambition",ambM.value);asM.textContent=`🌟 طموحك: ${ambM.value}`;};
+
+  setInterval(updateCountdownMobile,1000);
+  updateCountdownMobile();
+}
 </script>
 </body>
 </html>
+
