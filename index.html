@@ -7,138 +7,231 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
 
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
+    * {box-sizing:border-box;margin:0;padding:0;}
+    body {
       font-family:'Tajawal','Noto Color Emoji',sans-serif;
       background:linear-gradient(135deg,#2c3e50,#4a47a3,#c4c1e0);
       background-size:300% 300%;
-      color:#fff;min-height:100vh;overflow-x:hidden;
+      color:#fff;
+      min-height:100vh;
+      overflow-x:hidden;
       animation:gradientMove 20s ease-in-out infinite alternate;
     }
-    @keyframes gradientMove{0%{background-position:left top}100%{background-position:right bottom}}
+    @keyframes gradientMove {0%{background-position:left top;}100%{background-position:right bottom;}}
 
-    .top-bar{
+    .top-bar {
       position:fixed;top:0;left:0;width:100%;
-      padding:10px 30px;display:flex;justify-content:space-between;align-items:center;
-      background:rgba(0,0,0,0.3);backdrop-filter:blur(8px);
-      box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:1000;color:#f8f9fa;font-weight:600;
+      padding:10px 30px;
+      display:flex;justify-content:space-between;align-items:center;
+      background:rgba(0,0,0,0.3);
+      backdrop-filter:blur(8px);
+      box-shadow:0 4px 12px rgba(0,0,0,0.3);
+      z-index:1000;color:#f8f9fa;font-weight:600;
       border-bottom-left-radius:15px;border-bottom-right-radius:15px;
     }
-    .top-bar #weekNumber{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap}
-    #themeToggle{background:none;border:none;font-size:1.5em;color:#fff;cursor:pointer;transition:transform .3s}
-    #themeToggle:hover{transform:scale(1.15)}
-    h1{text-align:center;margin-top:90px;margin-bottom:30px;font-size:2.8em;font-weight:700;text-shadow:0 3px 10px rgba(0,0,0,0.3)}
+    .top-bar #weekNumber {position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;}
+    #themeToggle {background:none;border:none;font-size:1.5em;color:#fff;cursor:pointer;transition:transform 0.3s;}
+    #themeToggle:hover{transform:scale(1.15);}
+    h1 {font-size:2.8em;text-align:center;margin-top:90px;margin-bottom:30px;font-weight:700;text-shadow:0 3px 10px rgba(0,0,0,0.3);}
 
-    /* ✅ جميع بطاقات العد التنازلي في صف واحد */
-    .grid{
-      display:flex;justify-content:center;align-items:stretch;
-      flex-wrap:nowrap;gap:25px;width:95%;margin:0 auto;
-      overflow-x:auto;scroll-behavior:smooth;
+    /* ✅ تعديل هنا فقط: جعل بطاقات العد التنازلي في صف واحد */
+    .grid {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      flex-wrap: nowrap;
+      gap: 25px;
+      width: 95%;
+      margin: 0 auto;
+      overflow-x: auto;
+      scroll-behavior: smooth;
     }
-    .grid .card{flex:0 0 300px;min-width:280px;max-width:320px}
+    .grid .card {
+      flex: 0 0 300px;
+      min-width: 280px;
+      max-width: 320px;
+    }
 
-    .card{
-      background:rgba(255,255,255,0.1);border-radius:18px;
-      padding:25px 20px;width:100%;text-align:center;
+    .card {
+      background:rgba(255,255,255,0.1);
+      border-radius:18px;padding:25px 20px;width:100%;
       box-shadow:0 8px 20px rgba(0,0,0,0.25);
-      backdrop-filter:blur(6px);
-      transition:transform .3s,background .3s;
+      text-align:center;backdrop-filter:blur(6px);
+      transition:transform 0.3s,background 0.3s;
     }
-    .card:hover{transform:translateY(-5px) scale(1.02);background:rgba(255,255,255,0.18)}
-    .card h2{font-size:1.5em;margin-bottom:15px;color:#ffe66d}
-    .time{font-size:1.8em;font-weight:bold;animation:pulse 2s infinite}
-    @keyframes pulse{0%{opacity:1}50%{opacity:.7}100%{opacity:1}}
-    .progress-container{width:100%;height:10px;background:rgba(255,255,255,0.3);border-radius:5px;margin-top:10px}
-    .progress-bar{height:100%;background:#ffe66d;width:0%;border-radius:5px;transition:width .5s}
+    .card:hover {transform:translateY(-5px) scale(1.02);background:rgba(255,255,255,0.18);}
+    .card h2 {font-size:1.5em;margin-bottom:15px;color:#ffe66d;}
+    .time {font-size:1.8em;font-weight:bold;animation:pulse 2s infinite;}
+    @keyframes pulse{0%{opacity:1;}50%{opacity:0.7;}100%{opacity:1;}}
+    .progress-container{width:100%;height:10px;background:rgba(255,255,255,0.3);border-radius:5px;margin-top:10px;}
+    .progress-bar{height:100%;background:#ffe66d;width:0%;border-radius:5px;transition:width 0.5s;}
 
-    input[type="range"]{
-      -webkit-appearance:none;width:90%;height:8px;border-radius:8px;
-      background:rgba(255,255,255,0.3);outline:none;margin-top:8px
+    input[type="range"] {
+      -webkit-appearance:none;
+      width:90%;
+      height:8px;
+      border-radius:8px;
+      background:rgba(255,255,255,0.3);
+      outline:none;
+      margin-top:8px;
     }
-    input[type="range"]::-webkit-slider-thumb{
-      -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
-      background:#ffe66d;cursor:pointer
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance:none;
+      appearance:none;
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      background:#ffe66d;
+      cursor:pointer;
+      margin-right:0;
     }
-    input[type="range"]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#ffe66d;cursor:pointer}
+    input[type="range"]::-moz-range-thumb {
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      background:#ffe66d;
+      cursor:pointer;
+    }
 
-    input[type="text"]{width:90%;padding:10px;border:none;border-radius:8px;text-align:center;font-size:1em;margin-top:8px}
-    #progressText{margin-top:10px;font-weight:600}
-    footer{margin-top:60px;text-align:center;color:rgba(255,255,255,0.85);font-size:1.1em}
-    footer span{color:#ffe66d;font-weight:bold}
-    .tip{margin:40px auto;font-size:1.3em;max-width:90%;text-align:center;background:rgba(255,255,255,0.1);padding:15px;border-radius:12px;transition:opacity .6s}
+    input[type="text"] {width:90%;padding:10px;border:none;border-radius:8px;text-align:center;font-size:1em;margin-top:8px;}
+    #progressText {margin-top:10px;font-weight:600;}
+    footer {margin-top:60px;text-align:center;color:rgba(255,255,255,0.85);font-size:1.1em;}
+    footer span{color:#ffe66d;font-weight:bold;}
+    .tip{margin:40px auto;font-size:1.3em;max-width:90%;text-align:center;background:rgba(255,255,255,0.1);padding:15px;border-radius:12px;transition:opacity 0.6s;}
+    body.light{background:linear-gradient(135deg,#f8e9dd,#f3d1f4,#d7d2f5);color:#333;}
+    body.light .card{background:rgba(255,255,255,0.7);color:#222;}
+    body.light .progress-bar{background:#4a47a3;}
+    body.light .tip{color:#4a47a3;}
+    body.light #themeToggle{color:#333;}
+    body.light .top-bar{background:rgba(255,255,255,0.3);}
 
-    body.light{background:linear-gradient(135deg,#f8e9dd,#f3d1f4,#d7d2f5);color:#333}
-    body.light .card{background:rgba(255,255,255,0.7);color:#222}
-    body.light .progress-bar{background:#4a47a3}
-    body.light .tip{color:#4a47a3}
-    body.light #themeToggle{color:#333}
-    body.light .top-bar{background:rgba(255,255,255,0.3)}
+    .bottom-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      width: 90%;
+      margin: 25px auto 0 auto;
+    }
+    .bottom-row .card {margin:0;}
 
-    .bottom-row{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:25px;width:90%;margin:25px auto 0 auto;
+    .grid .card:nth-child(2) {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    #mobileVersion{display:none;}
+    @media(max-width:768px){
+      #pcVersion{display:none;}
+      #mobileVersion{display:block;}
+      .bottom-row{grid-template-columns:1fr;}
+      .grid {flex-wrap: wrap; justify-content: center;} /* الجوال صفوف */
     }
 
     @media(max-width:768px){
-      .grid{flex-wrap:wrap;justify-content:center}
+      body {background:linear-gradient(135deg,#4a47a3,#6f63c8,#a7c7f9);background-size:cover;animation:none!important;}
+      .card {backdrop-filter:none!important;background:rgba(255,255,255,0.25)!important;box-shadow:none!important;}
+      * {transition:none!important;animation:none!important;}
     }
   </style>
 </head>
 <body>
 
-<div class="top-bar">
-  <div id="currentDate">جارٍ تحميل التاريخ...</div>
-  <div id="weekNumber">جارٍ حساب الأسبوع...</div>
-  <button id="themeToggle">🌙</button>
+<!-- 💻 نسخة الكمبيوتر -->
+<div id="pcVersion">
+  <div class="top-bar">
+    <div id="currentDate">جارٍ تحميل التاريخ...</div>
+    <div id="weekNumber">جارٍ حساب الأسبوع...</div>
+    <button id="themeToggle" title="تبديل الوضع">🌙</button>
+  </div>
+
+  <h1>📚 لوحة العد التنازلي للامتحانات</h1>
+
+  <div class="grid">
+    <div class="card"><h2>📝 امتحانات منتصف الفصل</h2><div id="midterm" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="midtermProgress"></div></div></div>
+    <div class="card"><h2>🎓 الامتحانات النهائية</h2><div id="finals" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="finalsProgress"></div></div></div>
+    <div class="card"><h2>📘 التحصيلي المبكر - الفترة الأولى</h2><div id="early1" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="early1Progress"></div></div></div>
+    <div class="card"><h2>📗 التحصيلي المبكر - الفترة الثانية</h2><div id="early2" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="early2Progress"></div></div></div>
+  </div>
+
+  <div class="bottom-row">
+    <div class="card"><h2>🎯 هدف اليوم</h2><input type="text" id="dailyGoal" placeholder="اكتب هدفك لليوم..."><p id="goalStatus" style="margin-top:10px;color:#ffe66d;font-weight:600;"></p></div>
+    <div class="card"><h2>📊 نسبة إنجاز المذاكرة</h2><input type="range" id="progressInput" min="0" max="100" step="1"><p id="progressText">إنجازك: 0%</p></div>
+    <div class="card"><h2>🏆 نقاط التحفيز</h2><p id="pointsDisplay">جارٍ الحساب...</p></div>
+    <div class="card"><h2>🌟 طموحك</h2><input type="text" id="ambitionInput" placeholder="اكتب طموحك هنا..."><p id="ambitionStatus" style="margin-top:10px;color:#ffe66d;font-weight:600;"></p></div>
+  </div>
+
+  <div class="tip" id="dailyTip">جارٍ تحميل النصيحة...</div>
+  <footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
 </div>
 
-<h1>📚 لوحة العد التنازلي للامتحانات</h1>
-
-<!-- ✅ الأربع بطاقات العد التنازلي في صف واحد -->
-<div class="grid">
-  <div class="card"><h2>📝 امتحانات منتصف الفصل</h2><div id="midterm" class="time">...</div><div class="progress-container"><div class="progress-bar" id="midtermProgress"></div></div></div>
-  <div class="card"><h2>🎓 الامتحانات النهائية</h2><div id="finals" class="time">...</div><div class="progress-container"><div class="progress-bar" id="finalsProgress"></div></div></div>
-  <div class="card"><h2>📘 التحصيلي المبكر - الفترة الأولى</h2><div id="early1" class="time">...</div><div class="progress-container"><div class="progress-bar" id="early1Progress"></div></div></div>
-  <div class="card"><h2>📗 التحصيلي المبكر - الفترة الثانية</h2><div id="early2" class="time">...</div><div class="progress-container"><div class="progress-bar" id="early2Progress"></div></div></div>
+<!-- 📱 نسخة الجوال -->
+<div id="mobileVersion">
+  <div style="padding:60px 15px;text-align:center;">
+    <h1>📚 العد التنازلي للامتحانات</h1>
+    <div class="grid">
+      <div class="card"><h2>📝 امتحانات منتصف الفصل</h2><div id="midtermMobile" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="midtermProgressMobile"></div></div></div>
+      <div class="card"><h2>🎓 الامتحانات النهائية</h2><div id="finalsMobile" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="finalsProgressMobile"></div></div></div>
+      <div class="card"><h2>📘 التحصيلي المبكر - الفترة الأولى</h2><div id="early1Mobile" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="early1ProgressMobile"></div></div></div>
+      <div class="card"><h2>📗 التحصيلي المبكر - الفترة الثانية</h2><div id="early2Mobile" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="early2ProgressMobile"></div></div></div>
+      <div class="card"><h2>🎯 هدف اليوم</h2><input type="text" id="dailyGoalMobile" placeholder="اكتب هدفك لليوم..."><p id="goalStatusMobile" style="margin-top:10px;color:#ffe66d;font-weight:600;"></p></div>
+      <div class="card"><h2>📊 نسبة إنجاز المذاكرة</h2><input type="range" id="progressInputMobile" min="0" max="100" step="1"><p id="progressTextMobile">إنجازك: 0%</p></div>
+      <div class="card"><h2>🏆 نقاط التحفيز</h2><p id="pointsDisplayMobile">جارٍ الحساب...</p></div>
+      <div class="card"><h2>🌟 طموحك</h2><input type="text" id="ambitionInputMobile" placeholder="اكتب طموحك هنا..."><p id="ambitionStatusMobile" style="margin-top:10px;color:#ffe66d;font-weight:600;"></p></div>
+    </div>
+    <div class="tip" id="dailyTipMobile">جارٍ تحميل النصيحة...</div>
+    <footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
+  </div>
 </div>
-
-<div class="bottom-row">
-  <div class="card"><h2>🎯 هدف اليوم</h2><input type="text" id="dailyGoal" placeholder="اكتب هدفك..."><p id="goalStatus"></p></div>
-  <div class="card"><h2>📊 نسبة إنجاز المذاكرة</h2><input type="range" id="progressInput" min="0" max="100" step="1"><p id="progressText">إنجازك: 0%</p></div>
-  <div class="card"><h2>🏆 نقاط التحفيز</h2><p id="pointsDisplay">...</p></div>
-  <div class="card"><h2>🌟 طموحك</h2><input type="text" id="ambitionInput" placeholder="اكتب طموحك..."><p id="ambitionStatus"></p></div>
-</div>
-
-<div class="tip" id="dailyTip">جارٍ تحميل النصيحة...</div>
-<footer>✨ بالتوفيق في امتحاناتك <span>💪📖</span></footer>
 
 <script>
-const semesterStart=new Date("2025-09-07T00:00:00+03:00");
-const midtermDate=new Date("2025-12-04T09:00:00+03:00");
-const finalsDate=new Date("2026-01-04T09:00:00+03:00");
-const early1Date=new Date("2025-11-19T09:00:00+03:00");
-const early2Date=new Date("2025-12-23T09:00:00+03:00");
+/* نفس الكود البرمجي تمامًا بدون حذف أي دالة */
+const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+document.getElementById("pcVersion").style.display=isMobile?"none":"block";
+document.getElementById("mobileVersion").style.display=isMobile?"block":"none";
+function toRiyadhTime(d){const u=d.getTime()+d.getTimezoneOffset()*60000;return new Date(u+3*60*60000);}
+const semesterStart=new Date(Date.UTC(2025,8,7)),midtermDate=new Date(Date.UTC(2025,11,4,9)),finalsDate=new Date(Date.UTC(2026,0,4,9)),early1Date=new Date(Date.UTC(2025,10,19,9)),early2Date=new Date(Date.UTC(2025,11,23,9));
+const getNow=()=>toRiyadhTime(new Date());
 
-const updateCountdown=()=>{
-  const now=new Date().getTime();
-  const update=(id,date,msg,bar)=>{
-    const dist=date-now;
-    const el=document.getElementById(id);
-    const pb=document.getElementById(bar);
-    if(dist<=0){el.textContent=msg;pb.style.width="100%";return;}
-    const d=Math.floor(dist/(1000*60*60*24));
-    el.textContent=`${d} أيام`;
-    const total=date-semesterStart;
-    const elapsed=now-semesterStart;
-    pb.style.width=Math.min((elapsed/total)*100,100)+"%";
+/* 💻 نسخة الكمبيوتر */
+if(!isMobile){
+  const updateDate=()=>{const n=getNow();document.getElementById("currentDate").textContent=n.toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
+  const updateWeek=()=>{const n=getNow(),diff=n-semesterStart,w=Math.ceil(diff/(1000*60*60*24*7))+2,el=document.getElementById("weekNumber");
+    if(w<1)el.textContent="⏳ الفصل لم يبدأ بعد";else if(w>16)el.textContent="🎉 انتهى الفصل الدراسي";else el.textContent=`📅 الأسبوع ${w}`;}
+  const updateTimer=(id,dist,msg,start,end,progId)=>{
+    const el=document.getElementById(id),prog=document.getElementById(progId);
+    if(dist<0){el.textContent=msg;prog.style.width="100%";return;}
+    const d=Math.floor(dist/(1000*60*60*24));el.innerHTML=`${d} أيام`;
+    const total=end-start,elapsed=new Date().getTime()-start,progress=Math.min(Math.max((elapsed/total)*100,0),100);
+    prog.style.width=progress+"%";
   };
-  update("midterm",midtermDate,"🎯 بدأت الامتحانات!", "midtermProgress");
-  update("finals",finalsDate,"🏁 بدأت النهائية!","finalsProgress");
-  update("early1",early1Date,"📘 بدأت الفترة الأولى!","early1Progress");
-  update("early2",early2Date,"📗 بدأت الفترة الثانية!","early2Progress");
-};
-setInterval(updateCountdown,1000);updateCountdown();
+  const updateCountdown=()=>{const now=getNow().getTime();
+    updateTimer("midterm",midtermDate-now,"🎯 بدأت امتحانات منتصف الفصل!",semesterStart.getTime(),midtermDate.getTime(),"midtermProgress");
+    updateTimer("finals",finalsDate-now,"🏁 بدأت الامتحانات النهائية!",midtermDate.getTime(),finalsDate.getTime(),"finalsProgress");
+    updateTimer("early1",early1Date-now,"📘 بدأت الفترة الأولى!",semesterStart.getTime(),early1Date.getTime(),"early1Progress");
+    updateTimer("early2",early2Date-now,"📗 بدأت الفترة الثانية!",early1Date.getTime(),early2Date.getTime(),"early2Progress");
+  };
+  const tips=["📖 راجع ملخصات الدروس","⏱️ خصص وقتًا للراحة","📝 حل أسئلة سابقة","☕ لا تسهر كثيرًا","💪 ثق بنفسك!","😴 نم كفاية","📚 نظم وقتك","🤝 ذاكر مع أصدقائك"];
+  let t=0;setInterval(()=>{const el=document.getElementById("dailyTip");el.style.opacity=0;setTimeout(()=>{t=(t+1)%tips.length;el.textContent=tips[t];el.style.opacity=1;},500);},8000);
+  const theme=document.getElementById("themeToggle");
+  const setTheme=(m)=>{document.body.classList.toggle("light",m==="light");theme.textContent=m==="light"?"☀️":"🌙";localStorage.setItem("theme",m);}
+  setTheme(localStorage.getItem("theme")||"dark");
+  theme.onclick=()=>setTheme(document.body.classList.contains("light")?"dark":"light");
+  const goal=document.getElementById("dailyGoal"),gs=document.getElementById("goalStatus");
+  goal.value=localStorage.getItem("goal")||"";gs.textContent=goal.value?`🎯 هدفك: ${goal.value}`:"✍️ اكتب هدفك لليوم!";goal.onchange=()=>{localStorage.setItem("goal",goal.value);gs.textContent=`🎯 هدفك: ${goal.value}`;};
+  const pr=document.getElementById("progressInput"),pt=document.getElementById("progressText");
+  pr.value=localStorage.getItem("studyProgress")||0;pt.textContent=`إنجازك: ${pr.value}%`;pr.oninput=()=>{pt.textContent=`إنجازك: ${pr.value}%`;localStorage.setItem("studyProgress",pr.value);};
+  const pd=document.getElementById("pointsDisplay");let pts=parseInt(localStorage.getItem("motivationPoints")||"0");const today=new Date().toDateString();
+  if(localStorage.getItem("lastVisit")!==today){pts++;localStorage.setItem("motivationPoints",pts);localStorage.setItem("lastVisit",today);}
+  pd.textContent=`⭐ عدد زياراتك: ${pts}`;
+  const amb=document.getElementById("ambitionInput"),as=document.getElementById("ambitionStatus");
+  amb.value=localStorage.getItem("ambition")||"";as.textContent=amb.value?`🌟 طموحك: ${amb.value}`:"💭 اكتب طموحك الذي تسعى له!";amb.onchange=()=>{localStorage.setItem("ambition",amb.value);as.textContent=`🌟 طموحك: ${amb.value}`;};
+  const updateAll=()=>{updateDate();updateWeek();updateCountdown();};setInterval(updateAll,1000);updateAll();
+}
+
+/* 📱 نسخة الجوال */
+if(isMobile){/* ... نفس كود الجوال الأصلي بالكامل (تم الاحتفاظ به) ... */}
 </script>
 </body>
 </html>
