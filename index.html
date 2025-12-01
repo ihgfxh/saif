@@ -173,7 +173,14 @@ const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 document.getElementById("pcVersion").style.display=isMobile?"none":"block";
 document.getElementById("mobileVersion").style.display=isMobile?"block":"none";
 function toRiyadhTime(d){const u=d.getTime()+d.getTimezoneOffset()*60000;return new Date(u+3*60*60000);}
-const semesterStart=new Date(Date.UTC(2025,8,7)),midtermDate=new Date(Date.UTC(2025,11,4,9)),finalsDate=new Date(Date.UTC(2026,0,4,9)),early1Date=new Date(Date.UTC(2025,10,19,9)),early2Date=new Date(Date.UTC(2025,11,23,9));
+
+/*  ← ← ← التعديل هنا: تغيير تاريخ منتصف الفصل إلى 7 ديسمبر */
+const semesterStart=new Date(Date.UTC(2025,8,7)),
+midtermDate=new Date(Date.UTC(2025,11,7,9)),  // ← تعديل التاريخ فقط
+finalsDate=new Date(Date.UTC(2026,0,4,9)),
+early1Date=new Date(Date.UTC(2025,10,19,9)),
+early2Date=new Date(Date.UTC(2025,11,23,9));
+
 const getNow=()=>toRiyadhTime(new Date());
 
 /* 💻 نسخة الكمبيوتر */
@@ -181,43 +188,66 @@ if(!isMobile){
   const updateDate=()=>{const n=getNow();document.getElementById("currentDate").textContent=n.toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
   const updateWeek=()=>{const n=getNow(),diff=n-semesterStart,w=Math.ceil(diff/(1000*60*60*24*7))+2,el=document.getElementById("weekNumber");
     if(w<1)el.textContent="⏳ الفصل لم يبدأ بعد";else if(w>16)el.textContent="🎉 انتهى الفصل الدراسي";else el.textContent=`📅 الأسبوع ${w}`;}
+
+  /* ← ← ← التعديل هنا: حذف الكارد عند انتهاء العد */
   const updateTimer=(id,dist,msg,start,end,progId)=>{
     const el=document.getElementById(id),prog=document.getElementById(progId);
-    if(dist<0){el.textContent=msg;prog.style.width="100%";return;}
+    if(dist<0){
+      el.textContent=msg;
+      prog.style.width="100%";
+      document.getElementById(id).closest(".card").style.display="none"; // ← حذف البطاقة
+      return;
+    }
     const d=Math.floor(dist/(1000*60*60*24));el.innerHTML=`${d} أيام`;
     const total=end-start,elapsed=new Date().getTime()-start,progress=Math.min(Math.max((elapsed/total)*100,0),100);
     prog.style.width=progress+"%";
   };
+
   const updateCountdown=()=>{const now=getNow().getTime();
     updateTimer("midterm",midtermDate-now,"🎯 بدأت امتحانات منتصف الفصل!",semesterStart.getTime(),midtermDate.getTime(),"midtermProgress");
     updateTimer("finals",finalsDate-now,"🏁 بدأت الامتحانات النهائية!",midtermDate.getTime(),finalsDate.getTime(),"finalsProgress");
     updateTimer("early1",early1Date-now,"📘 بدأت الفترة الأولى!",semesterStart.getTime(),early1Date.getTime(),"early1Progress");
     updateTimer("early2",early2Date-now,"📗 بدأت الفترة الثانية!",early1Date.getTime(),early2Date.getTime(),"early2Progress");
   };
+
   const tips=["📖 راجع ملخصات الدروس","⏱️ خصص وقتًا للراحة","📝 حل أسئلة سابقة","☕ لا تسهر كثيرًا","💪 ثق بنفسك!","😴 نم كفاية","📚 نظم وقتك","🤝 ذاكر مع أصدقائك"];
   let t=0;setInterval(()=>{const el=document.getElementById("dailyTip");el.style.opacity=0;setTimeout(()=>{t=(t+1)%tips.length;el.textContent=tips[t];el.style.opacity=1;},500);},8000);
+
   const theme=document.getElementById("themeToggle");
   const setTheme=(m)=>{document.body.classList.toggle("light",m==="light");theme.textContent=m==="light"?"☀️":"🌙";localStorage.setItem("theme",m);}
   setTheme(localStorage.getItem("theme")||"dark");
   theme.onclick=()=>setTheme(document.body.classList.contains("light")?"dark":"light");
+
   const goal=document.getElementById("dailyGoal"),gs=document.getElementById("goalStatus");
   goal.value=localStorage.getItem("goal")||"";gs.textContent=goal.value?`🎯 هدفك: ${goal.value}`:"✍️ اكتب هدفك لليوم!";goal.onchange=()=>{localStorage.setItem("goal",goal.value);gs.textContent=`🎯 هدفك: ${goal.value}`;};
+
   const pr=document.getElementById("progressInput"),pt=document.getElementById("progressText");
   pr.value=localStorage.getItem("studyProgress")||0;pt.textContent=`إنجازك: ${pr.value}%`;pr.oninput=()=>{pt.textContent=`إنجازك: ${pr.value}%`;localStorage.setItem("studyProgress",pr.value);};
+
   const pd=document.getElementById("pointsDisplay");let pts=parseInt(localStorage.getItem("motivationPoints")||"0");const today=new Date().toDateString();
   if(localStorage.getItem("lastVisit")!==today){pts++;localStorage.setItem("motivationPoints",pts);localStorage.setItem("lastVisit",today);}
   pd.textContent=`⭐ عدد زياراتك: ${pts}`;
+
   const amb=document.getElementById("ambitionInput"),as=document.getElementById("ambitionStatus");
   amb.value=localStorage.getItem("ambition")||"";as.textContent=amb.value?`🌟 طموحك: ${amb.value}`:"💭 اكتب طموحك الذي تسعى له!";amb.onchange=()=>{localStorage.setItem("ambition",amb.value);as.textContent=`🌟 طموحك: ${amb.value}`;};
+
   const updateAll=()=>{updateDate();updateWeek();updateCountdown();};setInterval(updateAll,1000);updateAll();
 }
 
 /* 📱 نسخة الجوال — إصلاح كامل */
 if(isMobile){
+
+  /* ← ← ← التعديل هنا: حذف الكارد عند انتهاء العد */
   const updateTimerMobile=(id,dist,msg,start,end,progId)=>{
     const el=document.getElementById(id),prog=document.getElementById(progId);
     if(!el||!prog)return;
-    if(dist<0){el.textContent=msg;prog.style.width="100%";return;}
+
+    if(dist<0){
+      el.textContent=msg;
+      prog.style.width="100%";
+      document.getElementById(id).closest(".card").style.display="none"; // ← حذف الكارد بالجوال
+      return;
+    }
     const d=Math.floor(dist/(1000*60*60*24));el.innerHTML=`${d} أيام`;
     const total=end-start,elapsed=new Date().getTime()-start,progress=Math.min(Math.max((elapsed/total)*100,0),100);
     prog.style.width=progress+"%";
@@ -256,4 +286,4 @@ if(isMobile){
 }
 </script>
 </body>
-</html> 
+</html>
