@@ -135,6 +135,10 @@
     <div class="card"><h2>🎓 الامتحانات النهائية</h2><div id="finals" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="finalsProgress"></div></div></div>
     <div class="card"><h2>📘 التحصيلي المبكر - الفترة الأولى</h2><div id="early1" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="early1Progress"></div></div></div>
     <div class="card"><h2>📗 التحصيلي المبكر - الفترة الثانية</h2><div id="early2" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="early2Progress"></div></div></div>
+
+    <!-- 🟪 البطاقة الجديدة: اختبار القدرات الورقي -->
+    <div class="card"><h2>🟪 اختبار القدرات الورقي</h2><div id="qiyasPaper" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="qiyasPaperProgress"></div></div></div>
+
   </div>
 
   <div class="bottom-row">
@@ -157,6 +161,10 @@
       <div class="card"><h2>🎓 الامتحانات النهائية</h2><div id="finalsMobile" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="finalsProgressMobile"></div></div></div>
       <div class="card"><h2>📘 التحصيلي المبكر - الفترة الأولى</h2><div id="early1Mobile" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="early1ProgressMobile"></div></div></div>
       <div class="card"><h2>📗 التحصيلي المبكر - الفترة الثانية</h2><div id="early2Mobile" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="early2ProgressMobile"></div></div></div>
+
+      <!-- 🟪 البطاقة الجديدة في الجوال -->
+      <div class="card"><h2>🟪 اختبار القدرات الورقي</h2><div id="qiyasPaperMobile" class="time">جارٍ الحساب...</div><div class="progress-container"><div class="progress-bar" id="qiyasPaperProgressMobile"></div></div></div>
+
       <div class="card"><h2>🎯 هدف اليوم</h2><input type="text" id="dailyGoalMobile" placeholder="اكتب هدفك لليوم..."><p id="goalStatusMobile" style="margin-top:10px;color:#ffe66d;font-weight:600;"></p></div>
       <div class="card"><h2>📊 نسبة إنجاز المذاكرة</h2><input type="range" id="progressInputMobile" min="0" max="100" step="1"><p id="progressTextMobile">إنجازك: 0%</p></div>
       <div class="card"><h2>🏆 نقاط التحفيز</h2><p id="pointsDisplayMobile">جارٍ الحساب...</p></div>
@@ -168,18 +176,20 @@
 </div>
 
 <script>
-/* نفس الكود البرمجي تمامًا بدون حذف أي دالة */
 const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 document.getElementById("pcVersion").style.display=isMobile?"none":"block";
 document.getElementById("mobileVersion").style.display=isMobile?"block":"none";
 function toRiyadhTime(d){const u=d.getTime()+d.getTimezoneOffset()*60000;return new Date(u+3*60*60000);}
 
-/*  ← ← ← التعديل هنا: تغيير تاريخ منتصف الفصل إلى 7 ديسمبر */
+/* ← تغيير تاريخ منتصف الفصل */
 const semesterStart=new Date(Date.UTC(2025,8,7)),
-midtermDate=new Date(Date.UTC(2025,11,7,9)),  // ← تعديل التاريخ فقط
+midtermDate=new Date(Date.UTC(2025,11,7,9)),
 finalsDate=new Date(Date.UTC(2026,0,4,9)),
 early1Date=new Date(Date.UTC(2025,10,19,9)),
-early2Date=new Date(Date.UTC(2025,11,23,9));
+early2Date=new Date(Date.UTC(2025,11,23,9)),
+
+/* 🟪 تاريخ القدرات الجديد (18 ديسمبر 2025) */
+qiyasPaperDate=new Date(Date.UTC(2025,11,18,9));
 
 const getNow=()=>toRiyadhTime(new Date());
 
@@ -189,13 +199,13 @@ if(!isMobile){
   const updateWeek=()=>{const n=getNow(),diff=n-semesterStart,w=Math.ceil(diff/(1000*60*60*24*7))+2,el=document.getElementById("weekNumber");
     if(w<1)el.textContent="⏳ الفصل لم يبدأ بعد";else if(w>16)el.textContent="🎉 انتهى الفصل الدراسي";else el.textContent=`📅 الأسبوع ${w}`;}
 
-  /* ← ← ← التعديل هنا: حذف الكارد عند انتهاء العد */
+  /* ← حذف الكارد عند انتهاء العد */
   const updateTimer=(id,dist,msg,start,end,progId)=>{
     const el=document.getElementById(id),prog=document.getElementById(progId);
     if(dist<0){
       el.textContent=msg;
       prog.style.width="100%";
-      document.getElementById(id).closest(".card").style.display="none"; // ← حذف البطاقة
+      document.getElementById(id).closest(".card").style.display="none";
       return;
     }
     const d=Math.floor(dist/(1000*60*60*24));el.innerHTML=`${d} أيام`;
@@ -208,6 +218,9 @@ if(!isMobile){
     updateTimer("finals",finalsDate-now,"🏁 بدأت الامتحانات النهائية!",midtermDate.getTime(),finalsDate.getTime(),"finalsProgress");
     updateTimer("early1",early1Date-now,"📘 بدأت الفترة الأولى!",semesterStart.getTime(),early1Date.getTime(),"early1Progress");
     updateTimer("early2",early2Date-now,"📗 بدأت الفترة الثانية!",early1Date.getTime(),early2Date.getTime(),"early2Progress");
+
+    /* 🟪 تحديث العد التنازلي للقدرات */
+    updateTimer("qiyasPaper",qiyasPaperDate-now,"🟪 بدأ اختبار القدرات الورقي!",early2Date.getTime(),qiyasPaperDate.getTime(),"qiyasPaperProgress");
   };
 
   const tips=["📖 راجع ملخصات الدروس","⏱️ خصص وقتًا للراحة","📝 حل أسئلة سابقة","☕ لا تسهر كثيرًا","💪 ثق بنفسك!","😴 نم كفاية","📚 نظم وقتك","🤝 ذاكر مع أصدقائك"];
@@ -234,10 +247,9 @@ if(!isMobile){
   const updateAll=()=>{updateDate();updateWeek();updateCountdown();};setInterval(updateAll,1000);updateAll();
 }
 
-/* 📱 نسخة الجوال — إصلاح كامل */
+/* 📱 نسخة الجوال */
 if(isMobile){
 
-  /* ← ← ← التعديل هنا: حذف الكارد عند انتهاء العد */
   const updateTimerMobile=(id,dist,msg,start,end,progId)=>{
     const el=document.getElementById(id),prog=document.getElementById(progId);
     if(!el||!prog)return;
@@ -245,7 +257,7 @@ if(isMobile){
     if(dist<0){
       el.textContent=msg;
       prog.style.width="100%";
-      document.getElementById(id).closest(".card").style.display="none"; // ← حذف الكارد بالجوال
+      document.getElementById(id).closest(".card").style.display="none";
       return;
     }
     const d=Math.floor(dist/(1000*60*60*24));el.innerHTML=`${d} أيام`;
@@ -259,6 +271,9 @@ if(isMobile){
     updateTimerMobile("finalsMobile",finalsDate-now,"🏁 بدأت الامتحانات النهائية!",midtermDate.getTime(),finalsDate.getTime(),"finalsProgressMobile");
     updateTimerMobile("early1Mobile",early1Date-now,"📘 بدأت الفترة الأولى!",semesterStart.getTime(),early1Date.getTime(),"early1ProgressMobile");
     updateTimerMobile("early2Mobile",early2Date-now,"📗 بدأت الفترة الثانية!",early1Date.getTime(),early2Date.getTime(),"early2ProgressMobile");
+
+    /* 🟪 العد التنازلي للجوال */
+    updateTimerMobile("qiyasPaperMobile",qiyasPaperDate-now,"🟪 بدأ اختبار القدرات الورقي!",early2Date.getTime(),qiyasPaperDate.getTime(),"qiyasPaperProgressMobile");
   };
 
   const tips=["📖 راجع ملخصات الدروس","⏱️ خصص وقتًا للراحة","📝 حل أسئلة سابقة","☕ لا تسهر كثيرًا","💪 ثق بنفسك!","😴 نم كفاية","📚 نظم وقتك","🤝 ذاكر مع أصدقائك"];
